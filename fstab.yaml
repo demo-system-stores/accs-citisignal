@@ -1,0 +1,7 @@
+mountpoints:
+  /:
+    url: https://content.da.live/demo-system-stores/accs-citisignal/
+    type: markup
+
+folders:
+  /products/: /products/default
