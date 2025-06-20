@@ -15,6 +15,7 @@
 /* stylelint-disable no-empty-source */
 :root, .dropin-design {
   /* Adobe Commerce Dropin design tokens */
+  --main-color-accent: #8821f4;
   --color-brand-300: #6d6d6d;
   --color-brand-500: #454545;
   --color-brand-600: #383838;
@@ -288,8 +289,8 @@ a:not(.dropin-design a) {
 }
 
 a:not(.dropin-design a):hover {
-  color: var(--color-brand-600);
-  text-decoration: underline;
+  color: var(--color-brand-1000);
+  text-decoration: none;
 }
 
 /* buttons */

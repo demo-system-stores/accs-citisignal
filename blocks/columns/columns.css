@@ -1,6 +1,13 @@
+
+
 .columns > div {
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin: 25px 0;
+  background-color: var(--main-color-accent);
+  color: var(--background-color);
+  border-radius: 20px;
 }
 
 .columns img {
@@ -17,6 +24,7 @@
 
 .columns > div > .columns-img-col img {
   display: block;
+  border-radius: 20px 0 0 20px;
 }
 
 @media (width >= 900px) {
@@ -30,4 +38,33 @@
     flex: 1;
     order: unset;
   }
+}
+
+
+.columns-wrapper .columns h1,
+.columns-wrapper .columns h2,
+.columns-wrapper .columns h3,
+.columns-wrapper .columns h4,
+.columns-wrapper .columns h5,
+.columns-wrapper .columns h6 {
+  line-height: 50px;
+  padding-right: 24px;
+  margin: 10px 0 20px;
+}
+
+.columns-wrapper .columns p {
+  font-size: 20px;
+  line-height: 28px;
+  padding-right: 24px;
+  margin: 0;
+}
+
+.columns-wrapper .columns a {
+  color: var(--background-color);
+}
+.columns-wrapper .columns a.button {
+  color: var(--background-color);
+  background-color: var(--color-brand-1000);
+  border: none;
+  text-transform: uppercase;
 }

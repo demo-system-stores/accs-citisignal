@@ -1,6 +1,5 @@
 .cards-container .cards-wrapper {
-  margin-top: var(--spacing-xbig);
-  margin-bottom: var(--spacing-xbig);
+  margin-top: 0;
 }
 
 .cards > ul {
