@@ -1,5 +1,6 @@
 footer {
-    background-color: var(--color-neutral-100);
+    background-color: var(--color-brand-1000);
+    color: var(--background-color);
     font: var(--type-body-2-default-font);
     letter-spacing: var(--type-body-2-default-letter-spacing);
 }
@@ -12,6 +13,18 @@ footer .footer > div {
 
 footer .footer p {
     margin: 0;
+    color: var(--background-color);
+}
+
+footer .footer img {
+    width: 100px;
+    height: auto;
+}
+
+
+footer .footer a,
+footer .footer a:hover {
+    color: var(--background-color);
 }
 
 .storeview-switcher-button {
