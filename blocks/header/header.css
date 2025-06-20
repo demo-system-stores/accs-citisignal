@@ -313,6 +313,7 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li:hover,
   header nav .nav-sections .nav-drop[aria-expanded='true'] {
     background-color: var(--color-neutral-200);
+    color: var(--main-color-accent);
   }
 }
 
