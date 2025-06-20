@@ -15,6 +15,8 @@ header .nav-wrapper {
   z-index: 3;
   position: fixed;
   border-bottom: 1px solid var(--color-neutral-300);
+  transition: padding-bottom .30s ease, padding-top .30s;
+  box-shadow: 0 8px 20px 0 rgba(0 0 0 / 26%);
 }
 
 header nav {
@@ -164,8 +166,9 @@ li.nav-drop img {
 }
 
 header nav .nav-brand img {
-  width: 128px;
+  width: 100px;
   height: auto;
+  vertical-align: middle;
 }
 
 /* sections */
@@ -228,8 +231,8 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li,
   header nav .nav-sections .nav-drop {
-    border-radius: 4px;
-    padding: 0 var(--spacing-small);
+    border-radius: 0;
+    padding: 10px var(--spacing-small);
   }
 
   header nav .nav-sections .nav-drop {

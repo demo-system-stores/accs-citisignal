@@ -10,14 +10,27 @@
 }
 
 .hero h1 {
-  max-width: 1200px;
+  max-width: 300px;
+  line-height: 30px;
   margin-left: auto;
   margin-right: auto;
   color: var(--background-color);
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  top: 25%;
+  right: 3rem;
+  font-size: 24px;
+  font-weight: 700;
+}
+.hero p {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--background-color);
+  position: relative;
 }
 
 .hero picture {
-  position: absolute;
   z-index: -1;
   inset: 0;
   object-fit: cover;
@@ -28,6 +41,7 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+  border-radius: 20px;
 }
 
 @media (width >= 900px) {
