@@ -1,5 +1,6 @@
 .cards-container .cards-wrapper {
   margin-top: var(--spacing-xbig);
+  margin-bottom: var(--spacing-xbig);
 }
 
 .cards > ul {
@@ -12,8 +13,15 @@
 }
 
 .cards > ul > li {
-  border: var(--shape-border-width-1) solid var(--color-neutral-500);
-  background-color: var(--background-color);
+  border: none;
+  background-color: var(--color-brand-1000);
+  border-radius: 20px;
+  padding: 20px;
+  color: var(--background-color);
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 24px;
+  text-align: center;
 }
 
 .cards .cards-card-body {
@@ -22,10 +30,16 @@
 
 .cards .cards-card-image {
   line-height: 0;
+  height: auto;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cards > ul > li img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  width: auto;
+  height: 100px;
+  aspect-ratio: initial;
   object-fit: cover;
 }
