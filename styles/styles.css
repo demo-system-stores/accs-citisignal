@@ -290,7 +290,7 @@ a:not(.dropin-design a) {
 
 a:not(.dropin-design a):hover {
   color: var(--color-brand-1000);
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 /* buttons */

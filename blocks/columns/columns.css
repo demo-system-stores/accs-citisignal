@@ -59,7 +59,8 @@
   margin: 0;
 }
 
-.columns-wrapper .columns a {
+.columns-wrapper .columns a,
+.columns-wrapper .columns a:hover {
   color: var(--background-color);
 }
 .columns-wrapper .columns a.button {
