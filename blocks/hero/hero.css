@@ -16,13 +16,12 @@
   margin-right: auto;
   color: var(--background-color);
   position: absolute;
-  top: 10%;
-  right: 10%;
   top: 25%;
   right: 3rem;
   font-size: 24px;
   font-weight: 700;
 }
+
 .hero p {
   max-width: 1200px;
   margin: 0 auto;

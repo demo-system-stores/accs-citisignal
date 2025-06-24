@@ -16,7 +16,7 @@ header .nav-wrapper {
   position: fixed;
   border-bottom: 1px solid var(--color-neutral-300);
   transition: padding-bottom .30s ease, padding-top .30s;
-  box-shadow: 0 8px 20px 0 rgba(0 0 0 / 26%);
+  box-shadow: 0 8px 20px 0 rgb(0 0 0 / 26%);
 }
 
 header nav {
