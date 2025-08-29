@@ -65,16 +65,27 @@ function renderPlaceholder(config, block) {
   `));
 }
 
-function renderImage(image, size = 250) {
-  const { url: imageUrl, label } = image;
-  const createUrlForWidth = (url, w, useWebply = true) => {
+/**
+ * Returns a picture element specifically using AEM Assets format as documented:
+ * https://adobe-aem-assets-delivery-experimental.redoc.ly/
+ */
+function renderImage(product, size = 250) {
+  const { name } = product;
+  const { url: imageUrl, label } = product.images[0];
+
+  // Extract assetId from the URL
+  const urlParts = imageUrl.split('/');
+  const assetId = urlParts[urlParts.length - 1];
+
+  // Create base URL with proper structure
+  const baseUrl = imageUrl.replace(`/${assetId}`, '');
+
+  const createUrlForWidth = (url, w, format) => {
     const newUrl = new URL(url, window.location);
-    if (useWebply) {
-      newUrl.searchParams.set('format', 'webply');
-      newUrl.searchParams.set('optimize', 'medium');
-    } else {
-      newUrl.searchParams.delete('format');
-    }
+
+    // replace spaces with dashes
+    const seoName = name.replace(' ', '-');
+    newUrl.pathname = `${newUrl.pathname}/${assetId}/as/${seoName}.${format}`;
     newUrl.searchParams.set('width', w);
     newUrl.searchParams.delete('quality');
     newUrl.searchParams.delete('dpr');
@@ -82,15 +93,16 @@ function renderImage(image, size = 250) {
     return newUrl.toString();
   };
 
-  const createUrlForDpi = (url, w, useWebply = true) => `${createUrlForWidth(url, w, useWebply)} 1x, ${createUrlForWidth(url, w * 2, useWebply)} 2x, ${createUrlForWidth(url, w * 3, useWebply)} 3x`;
+  const createUrlForDpi = (url, w, format) => `${createUrlForWidth(url, w, format)} 1x, ${createUrlForWidth(url, w * 2, format)} 2x, ${createUrlForWidth(url, w * 3, format)} 3x`;
 
-  const webpUrl = createUrlForDpi(imageUrl, size, true);
-  const jpgUrl = createUrlForDpi(imageUrl, size, false);
+  // Use valid formats from the API
+  const webpUrl = createUrlForDpi(baseUrl, size, 'webp');
+  const jpgUrl = createUrlForDpi(baseUrl, size, 'jpg');
 
   return document.createRange().createContextualFragment(`<picture>
       <source srcset="${webpUrl}" />
       <source srcset="${jpgUrl}" />
-      <img height="${size}" width="${size}" src="${createUrlForWidth(imageUrl, size, false)}" loading="eager" alt="${label}" />
+      <img height="${size}" width="${size}" src="${createUrlForWidth(baseUrl, size, 'jpg')}" loading="eager" alt="${label}" />
     </picture>
   `);
 }
@@ -120,7 +132,7 @@ function renderProduct(product, config, block) {
     </div>
   `);
 
-  fragment.querySelector('.image').appendChild(renderImage(product.images[0], 250));
+  fragment.querySelector('.image').appendChild(renderImage(product, 250));
 
   const addToCartButton = fragment.querySelector('.add-to-cart');
   if (addToCartButton) {
