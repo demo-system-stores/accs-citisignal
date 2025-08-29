@@ -213,6 +213,33 @@
     ]
   },
   {
+    "id": "product-teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "div:nth-child(1) > div:nth-child(2)",
+        "label": "Product SKU",
+        "valueType": "string",
+        "required": true,
+        "description": "The SKU of the product to display"
+      },
+      {
+        "component": "boolean",
+        "name": "div:nth-child(2) > div:nth-child(2)",
+        "label": "Show Details Button",
+        "valueType": "boolean",
+        "description": "Show a button that links to the product details page"
+      },
+      {
+        "component": "boolean",
+        "name": "div:nth-child(3) > div:nth-child(2)",
+        "label": "Show Add to Cart Button",
+        "valueType": "boolean",
+        "description": "Show a button to add the product directly to cart"
+      }
+    ]
+  },
+  {
     "id": "quote",
     "fields": [
       {

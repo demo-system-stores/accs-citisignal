@@ -168,6 +168,15 @@
           }
         },
         {
+          "title": "Product Teaser",
+          "id": "product-teaser",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"product-teaser\"><div><div>sku</div><div></div></div><div><div>details-button</div><div></div></div><div><div>cart-button</div><div></div></div></div>"
+            }
+          }
+        },
+        {
           "title": "Quote",
           "id": "quote",
           "plugins": {
