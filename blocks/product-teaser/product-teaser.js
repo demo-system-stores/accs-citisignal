@@ -12,7 +12,7 @@ const productTeaserQuery = `query productTeaser($sku: String!) {
     externalId
     addToCartAllowed
     __typename
-    images(roles: ["small_image"]) {
+    images(roles: []) {
       label
       url
     }
