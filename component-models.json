@@ -217,7 +217,7 @@
     "fields": [
       {
         "component": "text",
-        "name": "div:nth-child(1) > div:nth-child(2)",
+        "name": "div:nth-child(1)>div:nth-child(2)>p:nth-child(1)",
         "label": "Product SKU",
         "valueType": "string",
         "required": true,
@@ -225,14 +225,14 @@
       },
       {
         "component": "boolean",
-        "name": "div:nth-child(2) > div:nth-child(2)",
+        "name": "div:nth-child(2)>div:nth-child(2)>p:nth-child(1)",
         "label": "Show Details Button",
         "valueType": "boolean",
         "description": "Show a button that links to the product details page"
       },
       {
         "component": "boolean",
-        "name": "div:nth-child(3) > div:nth-child(2)",
+        "name": "div:nth-child(3)>div:nth-child(2)>p:nth-child(1)",
         "label": "Show Add to Cart Button",
         "valueType": "boolean",
         "description": "Show a button to add the product directly to cart"
