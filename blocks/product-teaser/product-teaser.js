@@ -119,6 +119,21 @@ function renderProduct(product, config, block) {
   });
 
   block.textContent = '';
+
+  // Determine Add to Cart button state
+  let addToCartButtonHtml = '';
+  // Fix: Always show Add to Cart button if config['cart-button'] is true, regardless of __typename
+  if (config['cart-button']) {
+    if (__typename === 'SimpleProductView' && addToCartAllowed) {
+      addToCartButtonHtml = '<button class="add-to-cart secondary">Add to Cart</button>';
+    } else if (__typename === 'SimpleProductView' && !addToCartAllowed) {
+      addToCartButtonHtml = '<button class="add-to-cart secondary" disabled>Add to Cart</button>';
+    } else {
+      // For non-simple products, show disabled Add to Cart button
+      addToCartButtonHtml = '<button class="add-to-cart secondary" disabled>Add to Cart</button>';
+    }
+  }
+
   const fragment = document.createRange().createContextualFragment(`
     <div class="image">
     </div>
@@ -127,7 +142,7 @@ function renderProduct(product, config, block) {
       <div class="price">${renderPrice(product, priceFormatter.format)}</div>
       <div class="actions">
         ${config['details-button'] ? `<a href="${rootLink(`/products/${urlKey}/${sku}`)}" class="button primary">Details</a>` : ''}
-        ${config['cart-button'] && addToCartAllowed && __typename === 'SimpleProductView' ? '<button class="add-to-cart secondary">Add to Cart</button>' : ''}
+        ${addToCartButtonHtml}
       </div>
     </div>
   `);
@@ -135,7 +150,7 @@ function renderProduct(product, config, block) {
   fragment.querySelector('.image').appendChild(renderImage(product, 250));
 
   const addToCartButton = fragment.querySelector('.add-to-cart');
-  if (addToCartButton) {
+  if (addToCartButton && !addToCartButton.disabled && __typename === 'SimpleProductView' && addToCartAllowed) {
     addToCartButton.addEventListener('click', async () => {
       const values = [{
         optionsUIDs: [],
@@ -154,15 +169,17 @@ function renderProduct(product, config, block) {
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
-  config['details-button'] = !!(config['details-button'] || config['details-button'] === 'true');
-  config['cart-button'] = !!(config['cart-button'] || config['cart-button'] === 'true');
+
+  // Fix: Normalize config values to booleans, including string 'true'
+  config['details-button'] = config['details-button'] === true || config['details-button'] === 'true';
+  config['cart-button'] = config['cart-button'] === true || config['cart-button'] === 'true';
 
   renderPlaceholder(config, block);
 
   const { products } = await performCatalogServiceQuery(productTeaserQuery, {
     sku: config.sku,
   });
-  if (!products || !products.length > 0 || !products[0].sku) {
+  if (!products || products.length === 0 || !products[0].sku) {
     return;
   }
   const [product] = products;
