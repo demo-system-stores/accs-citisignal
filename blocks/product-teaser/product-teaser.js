@@ -70,8 +70,8 @@ function renderPlaceholder(config, block) {
       <h1></h1>
       <div class="price"></div>
       <div class="actions">
-        ${config['details-button'] === true ? '<a href="#" class="button primary disabled details-btn">Details</a>' : ''}
-        ${config['cart-button'] === true ? '<button class="secondary disabled cart-btn">Add to Cart</button>' : ''}
+        ${config['details-button'] === true ? '<a href="#" class="button primary disabled">Details</a>' : ''}
+        ${config['cart-button'] === true ? '<button class="secondary" disabled>Add to Cart</button>' : ''}
       </div>
     </div>
   `));
@@ -131,8 +131,6 @@ function renderProduct(product, config, block) {
   });
 
   block.textContent = '';
-  // Create a unique id for this teaser instance to avoid event handler confusion
-  const uniqueId = `teaser-${sku}-${Math.random().toString(36).substr(2, 9)}`;
   const fragment = document.createRange().createContextualFragment(`
     <div class="image">
     </div>
@@ -140,46 +138,16 @@ function renderProduct(product, config, block) {
       <h1>${name}</h1>
       <div class="price">${renderPrice(product, priceFormatter.format)}</div>
       <div class="actions">
-        ${config['details-button'] === true ? `<a href="${rootLink(`/products/${urlKey}/${sku}`)}" class="button primary details-btn" data-teaser-id="${uniqueId}">Details</a>` : ''}
-        ${config['cart-button'] === true && addToCartAllowed && __typename === 'SimpleProductView' ? `<button class="add-to-cart secondary cart-btn" data-teaser-id="${uniqueId}">Add to Cart</button>` : ''}
+        ${config['details-button'] === true ? `<a href="${rootLink(`/products/${urlKey}/${sku}`)}" class="button primary">Details</a>` : ''}
+        ${config['cart-button'] === true && addToCartAllowed && __typename === 'SimpleProductView' ? '<button class="add-to-cart secondary">Add to Cart</button>' : ''}
       </div>
     </div>
   `);
 
   fragment.querySelector('.image').appendChild(renderImage(product, 250));
 
-  // Only operate on the buttons inside this fragment (not globally)
-  const detailsBtn = fragment.querySelector(`.details-btn[data-teaser-id="${uniqueId}"]`);
-  const cartBtn = fragment.querySelector(`.cart-btn[data-teaser-id="${uniqueId}"]`);
-
-  if (detailsBtn && cartBtn) {
-    detailsBtn.addEventListener('click', (e) => {
-      // Prevent navigation if it's an anchor
-      if (detailsBtn.tagName === 'A' && detailsBtn.getAttribute('href') === '#') {
-        e.preventDefault();
-      }
-      detailsBtn.style.display = 'none';
-      cartBtn.style.display = '';
-    });
-    cartBtn.addEventListener('click', async (e) => {
-      // If this is the add-to-cart button, do the cart logic, then toggle
-      if (cartBtn.classList.contains('add-to-cart')) {
-        const values = [{
-          optionsUIDs: [],
-          quantity: 1,
-          sku: product.sku,
-        }];
-        const { addProductsToCart } = await import('@dropins/storefront-cart/api.js');
-        window.adobeDataLayer.push({ productContext: mapProductAcdl(product) });
-        console.debug('onAddToCart', values);
-        addProductsToCart(values);
-      }
-      cartBtn.style.display = 'none';
-      detailsBtn.style.display = '';
-    });
-  } else if (fragment.querySelector('.add-to-cart')) {
-    // If only add-to-cart exists, keep original logic
-    const addToCartButton = fragment.querySelector('.add-to-cart');
+  const addToCartButton = fragment.querySelector('.add-to-cart');
+  if (addToCartButton) {
     addToCartButton.addEventListener('click', async () => {
       const values = [{
         optionsUIDs: [],
