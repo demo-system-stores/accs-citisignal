@@ -153,11 +153,6 @@ function renderProduct(product, config, block) {
 }
 
 export default async function decorate(block) {
-  block.children[0].style.display = 'none';
-  block.children[1].style.display = 'none';
-  block.children[2].style.display = 'none';
-  
-
   const config = readBlockConfig(block);
   config['details-button'] = !!(config['details-button'] || config['details-button'] === 'true');
   config['cart-button'] = !!(config['cart-button'] || config['cart-button'] === 'true');
