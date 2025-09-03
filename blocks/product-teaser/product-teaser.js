@@ -48,16 +48,6 @@ fragment priceFields on ProductViewPrice {
   }
 }`;
 
-// Helper to normalize config values to booleans for show/hide
-function parseBoolean(val) {
-  if (typeof val === 'boolean') return val;
-  if (typeof val === 'string') {
-    const v = val.trim().toLowerCase();
-    return v === 'true' || v === 'show' || v === 'yes' || v === '1';
-  }
-  return false;
-}
-
 function renderPlaceholder(config, block) {
   block.textContent = '';
   block.appendChild(document.createRange().createContextualFragment(`
@@ -164,10 +154,8 @@ function renderProduct(product, config, block) {
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
-
-  // Fix: Normalize config values for show/hide logic
-  config['details-button'] = parseBoolean(config['details-button']);
-  config['cart-button'] = parseBoolean(config['cart-button']);
+  config['details-button'] = !!(config['details-button'] || config['details-button'] === 'true');
+  config['cart-button'] = !!(config['cart-button'] || config['cart-button'] === 'true');
 
   renderPlaceholder(config, block);
 

@@ -220,6 +220,7 @@
         "name": "div:nth-child(1)>div:nth-child(2)>p:nth-child(1)",
         "label": "Product SKU",
         "valueType": "string",
+        "required": true,
         "description": "The SKU of the product to display"
       },
       {
