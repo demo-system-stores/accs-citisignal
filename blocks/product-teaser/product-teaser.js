@@ -53,7 +53,9 @@ function parseBoolean(val) {
   if (typeof val === 'boolean') return val;
   if (typeof val === 'string') {
     const v = val.trim().toLowerCase();
-    return v === 'true' || v === 'show' || v === 'yes' || v === '1';
+    // Accept "show", "true", "yes", "1" as true, "hide", "false", "no", "0" as false
+    if (['true', 'show', 'yes', '1'].includes(v)) return true;
+    if (['false', 'hide', 'no', '0'].includes(v)) return false;
   }
   return false;
 }
@@ -68,8 +70,8 @@ function renderPlaceholder(config, block) {
       <h1></h1>
       <div class="price"></div>
       <div class="actions">
-        ${config['details-button'] ? '<a href="#" class="button primary disabled">Details</a>' : ''}
-        ${config['cart-button'] ? '<button class="secondary" disabled>Add to Cart</button>' : ''}
+        ${config['details-button'] === true ? '<a href="#" class="button primary disabled">Details</a>' : ''}
+        ${config['cart-button'] === true ? '<button class="secondary" disabled>Add to Cart</button>' : ''}
       </div>
     </div>
   `));
@@ -94,7 +96,7 @@ function renderImage(product, size = 250) {
     const newUrl = new URL(url, window.location);
 
     // replace spaces with dashes
-    const seoName = name.replace(' ', '-');
+    const seoName = name.replace(/ /g, '-');
     newUrl.pathname = `${newUrl.pathname}/${assetId}/as/${seoName}.${format}`;
     newUrl.searchParams.set('width', w);
     newUrl.searchParams.delete('quality');
@@ -136,8 +138,8 @@ function renderProduct(product, config, block) {
       <h1>${name}</h1>
       <div class="price">${renderPrice(product, priceFormatter.format)}</div>
       <div class="actions">
-        ${config['details-button'] ? `<a href="${rootLink(`/products/${urlKey}/${sku}`)}" class="button primary">Details</a>` : ''}
-        ${config['cart-button'] && addToCartAllowed && __typename === 'SimpleProductView' ? '<button class="add-to-cart secondary">Add to Cart</button>' : ''}
+        ${config['details-button'] === true ? `<a href="${rootLink(`/products/${urlKey}/${sku}`)}" class="button primary">Details</a>` : ''}
+        ${config['cart-button'] === true && addToCartAllowed && __typename === 'SimpleProductView' ? '<button class="add-to-cart secondary">Add to Cart</button>' : ''}
       </div>
     </div>
   `);
@@ -165,9 +167,9 @@ function renderProduct(product, config, block) {
 export default async function decorate(block) {
   const config = readBlockConfig(block);
 
-  // Fix: Normalize config values for show/hide logic
-  config['details-button'] = parseBoolean(config['details-button']);
-  config['cart-button'] = parseBoolean(config['cart-button']);
+  // Normalize config values for show/hide logic, always strictly boolean
+  config['details-button'] = parseBoolean(config['details-button']) === true;
+  config['cart-button'] = parseBoolean(config['cart-button']) === true;
 
   renderPlaceholder(config, block);
 
