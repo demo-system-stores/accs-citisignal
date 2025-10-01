@@ -149,7 +149,7 @@ export default async function decorate(block) {
             alias: product.sku,
             imageProps: {
               ...defaultImageProps,
-              style: 'aspect-ratio: 1; object-fit: contain; height: auto;'
+              style: 'aspect-ratio: 1; object-fit: contain; height: auto;',
             },
             wrapper: anchorWrapper,
             params: {
