@@ -9,6 +9,7 @@ import { decorateMain } from '../../scripts/scripts.js';
 import {
   loadSections,
 } from '../../scripts/aem.js';
+import { fetchWithCacheBusting } from '../../scripts/utils.js';
 
 /**
  * Loads a fragment.
@@ -19,7 +20,9 @@ export async function loadFragment(path) {
   if (path && path.startsWith('/')) {
     const root = getRootPath().replace(/\/$/, '');
     const url = `${root}${path}.plain.html`;
-    const resp = await fetch(url);
+
+    // Use cache-busting utility for UE support
+    const resp = await fetchWithCacheBusting(url);
     if (resp.ok) {
       const main = document.createElement('main');
       main.innerHTML = await resp.text();

@@ -672,6 +672,9 @@ async function loadSections(element) {
 
 init();
 
+// Export utilities for blocks
+export { isUniversalEditor, fetchWithCacheBusting } from './utils.js';
+
 export {
   buildBlock,
   createOptimizedPicture,
