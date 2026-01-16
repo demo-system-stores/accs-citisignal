@@ -28,10 +28,17 @@ import {
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
+  const paragraph = main.querySelector('p');
+  const anchor = main.querySelector('a');
   // eslint-disable-next-line no-bitwise
-  if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
+  if (
+    h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)
+  ) {
     const section = document.createElement('div');
-    section.append(buildBlock('hero', { elems: [picture, h1] }));
+    const elems = [picture, h1];
+    if (paragraph) elems.push(paragraph);
+    if (anchor) elems.push(anchor);
+    section.append(buildBlock('hero', { elems }));
     main.prepend(section);
   }
 }

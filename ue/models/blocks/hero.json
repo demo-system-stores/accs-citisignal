@@ -5,7 +5,7 @@
       "id": "hero",
       "plugins": {
         "da": {
-          "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1></div></div></div>"
+          "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1><p></p><a href=\"\"></a></div></div></div>"
         }
       }
     }
@@ -33,6 +33,27 @@
           "name": "div:nth-child(1)>div:nth-child(1)>h1:nth-child(2)",
           "value": "",
           "label": "Text",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(3)",
+          "value": "",
+          "label": "Paragraph",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(4)[href]",
+          "value": "",
+          "label": "Anchor URL",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(4)",
+          "value": "",
+          "label": "Anchor Text",
           "valueType": "string"
         }
       ]
