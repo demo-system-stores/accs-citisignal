@@ -16,17 +16,14 @@
   margin-right: auto;
   color: var(--background-color);
   position: absolute;
-  top: initial;
-  bottom: 10px;
-  right: 32px;
-  background: rgb(0 0 0 / 50%);
-  max-width: 40%;
-  padding: 20px 30px;
-  border-radius: 20px 0;
-  font-size: 18px;
-  font-weight: 500;
+  top: 10%;
+  right: 5%;
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bold;
   letter-spacing: 1px;
-  line-height: 30px;
+  line-height: 25px;
+  width: 30%;
 }
 
 .hero p {
@@ -49,6 +46,47 @@
   height: 100%;
   border-radius: 20px;
 }
+
+.hero p a.button {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--background-color);
+  background-color: rgb(0, 0, 0, .3);
+  padding: 8px 16px;
+  border-radius: 25px;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+
+.hero > div > div {
+  position: relative;
+}
+
+.hero > div > div > p:nth-of-type(1) {
+  display: block;
+}
+
+.hero > div > div > p:nth-of-type(2) {
+  position: absolute;
+  top: 25%;
+  right: 5%;
+  padding: 20px;
+  width: 30%;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
+}
+.hero > div > div > p:nth-of-type(3) {
+  position: absolute;
+  top: 35%;
+  right: 5%;
+  padding: 20px;
+  width: 30%;
+}
+
+
 
 @media (min-width: 900px) {
   .hero {
