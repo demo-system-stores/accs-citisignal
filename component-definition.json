@@ -154,7 +154,7 @@
           "id": "hero",
           "plugins": {
             "da": {
-              "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1><p></p><a href=\"\"></a></div></div></div>"
+              "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1><h2></h2><p></p><a href=\"\"></a></div></div></div>"
             }
           }
         },

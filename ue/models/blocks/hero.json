@@ -5,7 +5,7 @@
       "id": "hero",
       "plugins": {
         "da": {
-          "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1><p></p><a href=\"\"></a></div></div></div>"
+          "unsafeHTML": "<div class=\"hero\"><div><div><picture><source type=\"image/webp\" srcset=\"\"><source type=\"image/jpeg\" srcset=\"\"><img loading=\"lazy\"></picture><h1></h1><h2></h2><p></p><a href=\"\"></a></div></div></div>"
         }
       }
     }
@@ -37,21 +37,28 @@
         },
         {
           "component": "text",
-          "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(3)",
+          "name": "div:nth-child(1)>div:nth-child(1)>h2:nth-child(3)",
+          "value": "",
+          "label": "Subtitle",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(4)",
           "value": "",
           "label": "Description",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(4)",
+          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(5)",
           "value": "",
           "label": "Button Label",
           "valueType": "string"
         },
         {
           "component": "text",
-          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(4)[href]",
+          "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(5)[href]",
           "value": "",
           "label": "Button URL",
           "valueType": "string"

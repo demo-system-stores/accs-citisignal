@@ -27,6 +27,7 @@ import {
  */
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
+  const h2 = main.querySelector('h2');
   const picture = main.querySelector('picture');
   const paragraph = main.querySelector('p');
   const anchor = main.querySelector('a');
@@ -36,6 +37,7 @@ function buildHeroBlock(main) {
   ) {
     const section = document.createElement('div');
     const elems = [picture, h1];
+    if (h2) elems.push(h2);
     if (paragraph) elems.push(paragraph);
     if (anchor) elems.push(anchor);
     section.append(buildBlock('hero', { elems }));
