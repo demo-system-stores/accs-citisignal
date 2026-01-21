@@ -300,14 +300,14 @@
       },
       {
         "component": "text",
-        "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(5)",
+        "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(5)>a:nth-child(1)",
         "value": "",
         "label": "Button Label",
         "valueType": "string"
       },
       {
         "component": "text",
-        "name": "div:nth-child(1)>div:nth-child(1)>a:nth-child(5)[href]",
+        "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(5)>a:nth-child(1)[href]",
         "value": "",
         "label": "Button URL",
         "valueType": "string"
