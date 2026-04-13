@@ -16,7 +16,7 @@ export const THEME_STYLESHEET_KEYS = [
 export const THEME_STYLE_ATTR = 'data-accs-stylesheet-root';
 
 const DA_TOKEN_URL = 'https://285361-demosystemcommerce-devpankaj.adobeioruntime.net/api/v1/web/dsc-eds-api/da-access-token';
-  
+
 export function parseDaSiteContext() {
   const host = window.location.hostname;
   const hostParts = host.split('--');
@@ -101,6 +101,26 @@ export async function postStylesheetJson(sheetObject) {
 
 const allowedThemeKeys = new Set(THEME_STYLESHEET_KEYS);
 
+/**
+ * Merges theme token rows into a full stylesheet for the DA Source API.
+ * Non-theme rows are kept. Theme keys use non-empty entries from themeValues.
+ * @param {object} currentSheet Full stylesheet JSON (may be empty).
+ * @param {Record<string, string>} themeValues Theme key to value (blank omits).
+ * @returns {object} Sheet for {@link postStylesheetJson}.
+ */
+export function mergeThemeIntoStylesheet(currentSheet, themeValues) {
+  const data = Array.isArray(currentSheet?.data) ? [...currentSheet.data] : [];
+  const rest = data.filter((item) => item?.key && !allowedThemeKeys.has(item.key));
+  const newThemeRows = THEME_STYLESHEET_KEYS.filter((key) => {
+    const v = themeValues[key];
+    return v != null && String(v).trim() !== '';
+  }).map((key) => ({ key, value: String(themeValues[key]).trim() }));
+  return {
+    ...currentSheet,
+    data: [...rest, ...newThemeRows],
+  };
+}
+
 function themeRowsFromSheet(stylesheetData) {
   if (!Array.isArray(stylesheetData?.data)) return [];
   return stylesheetData.data.filter(
@@ -135,8 +155,8 @@ export function injectThemeStyleTag(stylesheetData) {
 }
 
 /**
- * Element whose data-aue-* attributes match how the pipeline instruments page-metadata metas for Universal Editor.
- * Falls back to {@link document.documentElement} when no instrumented meta exists yet.
+ * Element with data-aue-* matching page-metadata meta instrumentation for UE.
+ * Falls back to {@link document.documentElement} if none.
  * @returns {Element}
  */
 function getPageMetadataUeTemplate() {
@@ -170,9 +190,9 @@ export function applyPageMetadataUeInstrumentation(meta, fieldKey) {
 }
 
 /**
- * Sets page-metadata meta tags from the stylesheet so Universal Editor page properties show prefilled values.
- * Metas must carry data-aue-prop / data-aue-type (and usually data-aue-resource) or UE ignores them.
- * Only updates content when missing or blank so authored page metadata is not overwritten.
+ * Sets page-metadata metas from the stylesheet so UE page properties are prefilled.
+ * Metas need data-aue-prop / data-aue-type (and usually data-aue-resource).
+ * Only fills content when missing or blank so authored metadata is kept.
  * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
  */
 export function prefillPageMetadataFromStylesheet(stylesheetData) {

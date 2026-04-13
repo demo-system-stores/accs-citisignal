@@ -280,6 +280,53 @@
     ]
   },
   {
+    "id": "customise-theme",
+    "fields": [
+      {
+        "component": "text",
+        "name": "theme-primary",
+        "label": "Theme primary",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "theme-secondary",
+        "label": "Theme secondary",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "primary-text",
+        "label": "Primary text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "secondary-text",
+        "label": "Secondary text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "menu-background",
+        "label": "Menu background",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "menu-text-color",
+        "label": "Menu text color",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "fonts",
+        "label": "Fonts",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

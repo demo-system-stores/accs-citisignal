@@ -195,6 +195,16 @@
           }
         },
         {
+          "title": "Customise theme",
+          "id": "customise-theme",
+          "model": "customise-theme",
+          "plugins": {
+            "da": {
+              "type": "key-value-block"
+            }
+          }
+        },
+        {
           "title": "Fragment",
           "id": "fragment",
           "model": "fragment",
