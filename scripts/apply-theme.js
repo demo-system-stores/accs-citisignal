@@ -1,6 +1,6 @@
 /**
  * Theme tokens stored in DA `stylesheet.json` (keys become `--{key}` on :root).
- * Kept in sync with page metadata fields in models/_page.json.
+ * Edited in authoring via the customise-theme block (not page metadata).
  */
 export const THEME_STYLESHEET_KEYS = [
   'theme-primary',
