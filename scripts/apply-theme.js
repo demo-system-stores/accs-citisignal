@@ -124,6 +124,14 @@ export function injectThemeStyleTag(stylesheetData) {
     document.head.appendChild(el);
   }
   el.textContent = css;
+
+  // Save the theme data on localStorage as well
+  try {
+    localStorage.setItem('theme-stylesheet-data', JSON.stringify(stylesheetData));
+  } catch (e) {
+    // Ignore write errors (e.g. quota exceeded)
+    // Could add some logging here if needed
+  }
 }
 
 /**
@@ -158,7 +166,12 @@ async function applyTheme() {
     console.error('Error fetching remote stylesheet.json:', err);
   }
   injectThemeStyleTag(stylesheetData);
-  prefillPageMetadataFromStylesheet(stylesheetData);
+  
+  
+  setTimeout(() => {
+    prefillPageMetadataFromStylesheet(stylesheetData);
+  }, 2000);
+  
 }
 
 applyTheme();
