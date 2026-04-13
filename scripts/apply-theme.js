@@ -101,17 +101,21 @@ export async function postStylesheetJson(sheetObject) {
 
 const allowedThemeKeys = new Set(THEME_STYLESHEET_KEYS);
 
+function themeRowsFromSheet(stylesheetData) {
+  if (!Array.isArray(stylesheetData?.data)) return [];
+  return stylesheetData.data.filter(
+    (item) => item?.key && allowedThemeKeys.has(item.key) && item.value != null && String(item.value).trim() !== '',
+  );
+}
+
 /**
  * Injects a style element in document.head with :root custom properties from the DA sheet.
  * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
  */
 export function injectThemeStyleTag(stylesheetData) {
-  if (!Array.isArray(stylesheetData?.data)) return;
-  const rootVars = stylesheetData.data
-    .filter((item) => item?.key && allowedThemeKeys.has(item.key) && item.value != null && String(item.value).trim() !== '')
-    .map((item) => `  --${item.key}: ${item.value};`)
-    .join('\n');
-  if (!rootVars) return;
+  const rows = themeRowsFromSheet(stylesheetData);
+  if (rows.length === 0) return;
+  const rootVars = rows.map((item) => `  --${item.key}: ${item.value};`).join('\n');
   const css = `:root {\n${rootVars}\n}`;
   let el = document.head.querySelector(`style[${THEME_STYLE_ATTR}]`);
   if (!el) {
@@ -122,6 +126,30 @@ export function injectThemeStyleTag(stylesheetData) {
   el.textContent = css;
 }
 
+/**
+ * Sets page-metadata meta tags from the stylesheet so Universal Editor page properties show prefilled values.
+ * Only updates tags whose content is missing or blank so authored page metadata is not overwritten.
+ * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
+ */
+export function prefillPageMetadataFromStylesheet(stylesheetData) {
+  const rows = themeRowsFromSheet(stylesheetData);
+  rows.forEach(({ key, value }) => {
+    const content = String(value).trim();
+    const metas = document.head.querySelectorAll(`meta[name="${key}"]`);
+    if (metas.length === 0) {
+      const meta = document.createElement('meta');
+      meta.setAttribute('name', key);
+      meta.setAttribute('content', content);
+      document.head.appendChild(meta);
+      return;
+    }
+    metas.forEach((meta) => {
+      const cur = (meta.getAttribute('content') ?? '').trim();
+      if (!cur) meta.setAttribute('content', content);
+    });
+  });
+}
+
 async function applyTheme() {
   let stylesheetData = {};
   try {
@@ -130,6 +158,7 @@ async function applyTheme() {
     console.error('Error fetching remote stylesheet.json:', err);
   }
   injectThemeStyleTag(stylesheetData);
+  prefillPageMetadataFromStylesheet(stylesheetData);
 }
 
 applyTheme();

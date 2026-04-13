@@ -22,6 +22,41 @@
         "name": "robots",
         "label": "Robots",
         "description": "Index control via robots"
+      },
+      {
+        "component": "text",
+        "name": "theme-primary",
+        "label": "Theme primary"
+      },
+      {
+        "component": "text",
+        "name": "theme-secondary",
+        "label": "Theme secondary"
+      },
+      {
+        "component": "text",
+        "name": "primary-text",
+        "label": "Primary text"
+      },
+      {
+        "component": "text",
+        "name": "secondary-text",
+        "label": "Secondary text"
+      },
+      {
+        "component": "text",
+        "name": "menu-background",
+        "label": "Menu background"
+      },
+      {
+        "component": "text",
+        "name": "menu-text-color",
+        "label": "Menu text color"
+      },
+      {
+        "component": "text",
+        "name": "fonts",
+        "label": "Fonts"
       }
     ]
   },
