@@ -135,8 +135,44 @@ export function injectThemeStyleTag(stylesheetData) {
 }
 
 /**
+ * Element whose data-aue-* attributes match how the pipeline instruments page-metadata metas for Universal Editor.
+ * Falls back to {@link document.documentElement} when no instrumented meta exists yet.
+ * @returns {Element}
+ */
+function getPageMetadataUeTemplate() {
+  const textMeta = document.head.querySelector('meta[data-aue-type="text"][data-aue-prop]');
+  if (textMeta) return textMeta;
+  const anyMeta = document.head.querySelector('meta[data-aue-prop]');
+  if (anyMeta && anyMeta.getAttribute('data-aue-type') !== 'media') return anyMeta;
+  return document.documentElement;
+}
+
+/**
+ * Copies Universal Editor instrumentation onto a theme meta so the page-metadata panel binds to it.
+ * @param {HTMLMetaElement} meta
+ * @param {string} fieldKey model field name (meta name)
+ */
+export function applyPageMetadataUeInstrumentation(meta, fieldKey) {
+  const template = getPageMetadataUeTemplate();
+  if (template.tagName === 'META') {
+    [...template.attributes].forEach(({ name, value }) => {
+      if (!name.startsWith('data-aue-') || name === 'data-aue-prop') return;
+      meta.setAttribute(name, value);
+    });
+  } else {
+    const resource = template.getAttribute('data-aue-resource');
+    if (resource) meta.setAttribute('data-aue-resource', resource);
+    const model = template.getAttribute('data-aue-model');
+    if (model) meta.setAttribute('data-aue-model', model);
+  }
+  meta.setAttribute('data-aue-type', 'text');
+  meta.setAttribute('data-aue-prop', fieldKey);
+}
+
+/**
  * Sets page-metadata meta tags from the stylesheet so Universal Editor page properties show prefilled values.
- * Only updates tags whose content is missing or blank so authored page metadata is not overwritten.
+ * Metas must carry data-aue-prop / data-aue-type (and usually data-aue-resource) or UE ignores them.
+ * Only updates content when missing or blank so authored page metadata is not overwritten.
  * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
  */
 export function prefillPageMetadataFromStylesheet(stylesheetData) {
@@ -148,30 +184,43 @@ export function prefillPageMetadataFromStylesheet(stylesheetData) {
       const meta = document.createElement('meta');
       meta.setAttribute('name', key);
       meta.setAttribute('content', content);
+      applyPageMetadataUeInstrumentation(meta, key);
       document.head.appendChild(meta);
       return;
     }
     metas.forEach((meta) => {
       const cur = (meta.getAttribute('content') ?? '').trim();
       if (!cur) meta.setAttribute('content', content);
+      if (!meta.hasAttribute('data-aue-prop')) {
+        applyPageMetadataUeInstrumentation(meta, key);
+      }
     });
   });
 }
 
+/** Latest sheet payload for re-running metadata sync after UE attaches instrumentation. */
+let lastStylesheetDataForMetadata = {};
+
 async function applyTheme() {
-  let stylesheetData = {};
   try {
-    stylesheetData = await fetchStylesheetJson();
+    lastStylesheetDataForMetadata = await fetchStylesheetJson();
   } catch (err) {
     console.error('Error fetching remote stylesheet.json:', err);
+    lastStylesheetDataForMetadata = {};
   }
-  injectThemeStyleTag(stylesheetData);
-  
-  
-  setTimeout(() => {
-    prefillPageMetadataFromStylesheet(stylesheetData);
-  }, 2000);
-  
+  injectThemeStyleTag(lastStylesheetDataForMetadata);
+  prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
 }
+
+document.addEventListener(
+  'aue:initialized',
+  () => {
+    prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
+    requestAnimationFrame(() => {
+      prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
+    });
+  },
+  { passive: true },
+);
 
 applyTheme();
