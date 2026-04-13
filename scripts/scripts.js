@@ -1,3 +1,4 @@
+import './apply-theme.js';
 import {
   buildBlock,
   loadHeader,
