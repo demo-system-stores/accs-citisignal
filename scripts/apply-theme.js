@@ -2,6 +2,9 @@
  * Theme tokens stored in DA `stylesheet.json` (keys become `--{key}` on :root).
  * Edited in authoring via the customise-theme block (not page metadata).
  */
+// eslint-disable-next-line import/no-cycle -- aem does not import apply-theme
+import { toClassName } from './aem.js';
+
 export const THEME_STYLESHEET_KEYS = [
   'theme-primary',
   'theme-secondary',
@@ -154,90 +157,97 @@ export function injectThemeStyleTag(stylesheetData) {
   }
 }
 
-/**
- * Element with data-aue-* matching page-metadata meta instrumentation for UE.
- * Falls back to {@link document.documentElement} if none.
- * @returns {Element}
- */
-function getPageMetadataUeTemplate() {
-  const textMeta = document.head.querySelector('meta[data-aue-type="text"][data-aue-prop]');
-  if (textMeta) return textMeta;
-  const anyMeta = document.head.querySelector('meta[data-aue-prop]');
-  if (anyMeta && anyMeta.getAttribute('data-aue-type') !== 'media') return anyMeta;
-  return document.documentElement;
+function themeValueMapFromSheet(stylesheetData) {
+  const map = {};
+  themeRowsFromSheet(stylesheetData).forEach(({ key, value }) => {
+    map[key] = String(value).trim();
+  });
+  return map;
 }
 
-/**
- * Copies Universal Editor instrumentation onto a theme meta so the page-metadata panel binds to it.
- * @param {HTMLMetaElement} meta
- * @param {string} fieldKey model field name (meta name)
- */
-export function applyPageMetadataUeInstrumentation(meta, fieldKey) {
-  const template = getPageMetadataUeTemplate();
-  if (template.tagName === 'META') {
-    [...template.attributes].forEach(({ name, value }) => {
-      if (!name.startsWith('data-aue-') || name === 'data-aue-prop') return;
-      meta.setAttribute(name, value);
-    });
-  } else {
-    const resource = template.getAttribute('data-aue-resource');
-    if (resource) meta.setAttribute('data-aue-resource', resource);
-    const model = template.getAttribute('data-aue-model');
-    if (model) meta.setAttribute('data-aue-model', model);
-  }
-  meta.setAttribute('data-aue-type', 'text');
-  meta.setAttribute('data-aue-prop', fieldKey);
-}
-
-/**
- * Sets page-metadata metas from the stylesheet so UE page properties are prefilled.
- * Metas need data-aue-prop / data-aue-type (and usually data-aue-resource).
- * Only fills content when missing or blank so authored metadata is kept.
- * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
- */
-export function prefillPageMetadataFromStylesheet(stylesheetData) {
-  const rows = themeRowsFromSheet(stylesheetData);
-  rows.forEach(({ key, value }) => {
-    const content = String(value).trim();
-    const metas = document.head.querySelectorAll(`meta[name="${key}"]`);
-    if (metas.length === 0) {
-      const meta = document.createElement('meta');
-      meta.setAttribute('name', key);
-      meta.setAttribute('content', content);
-      applyPageMetadataUeInstrumentation(meta, key);
-      document.head.appendChild(meta);
-      return;
+function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
+  block.querySelectorAll('input.customise-theme-text[data-aue-prop]').forEach((input) => {
+    const key = input.getAttribute('data-aue-prop');
+    if (!key || !allowedThemeKeys.has(key)) return;
+    const val = valueByKey[key];
+    if (val == null || val === '') return;
+    input.value = val;
+    const row = input.closest('.customise-theme-row');
+    const color = row?.querySelector('input.customise-theme-color');
+    if (color) {
+      const hex = val.startsWith('#') ? val : `#${val}`;
+      if (/^#[0-9a-fA-F]{6}$/.test(hex)) color.value = hex.toLowerCase();
     }
-    metas.forEach((meta) => {
-      const cur = (meta.getAttribute('content') ?? '').trim();
-      if (!cur) meta.setAttribute('content', content);
-      if (!meta.hasAttribute('data-aue-prop')) {
-        applyPageMetadataUeInstrumentation(meta, key);
-      }
-    });
   });
 }
 
-/** Latest sheet payload for re-running metadata sync after UE attaches instrumentation. */
-let lastStylesheetDataForMetadata = {};
+function syncAuthoringTableCustomiseThemeBlock(block, valueByKey) {
+  block.querySelectorAll(':scope > div').forEach((row) => {
+    const cols = [...row.children];
+    if (cols.length < 2) return;
+    const key = toClassName(cols[0].textContent);
+    if (!allowedThemeKeys.has(key)) return;
+    const val = valueByKey[key];
+    if (val == null || val === '') return;
+    const valCell = cols[1];
+    const target = valCell.matches('[data-aue-prop]')
+      ? valCell
+      : valCell.querySelector('[data-aue-prop]') || valCell.querySelector('p') || valCell;
+    target.textContent = val;
+  });
+}
+
+/** Remove legacy head metas from the old page-metadata theme prefill. */
+function removeLegacyThemeMetaTags() {
+  THEME_STYLESHEET_KEYS.forEach((key) => {
+    document.head.querySelectorAll(`meta[name="${key}"]`).forEach((meta) => meta.remove());
+  });
+}
+
+/**
+ * Pushes stylesheet theme values into customise-theme blocks for UE block properties.
+ * Targets authored table cells or decorated inputs (data-aue-prop).
+ * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
+ */
+export function syncThemeSheetToCustomiseThemeBlocks(stylesheetData) {
+  const map = themeValueMapFromSheet(stylesheetData);
+  if (Object.keys(map).length === 0) return;
+  document.querySelectorAll('.customise-theme').forEach((block) => {
+    if (block.querySelector('input.customise-theme-text[data-aue-prop]')) {
+      syncDecoratedCustomiseThemeBlock(block, map);
+    } else {
+      syncAuthoringTableCustomiseThemeBlock(block, map);
+    }
+  });
+}
+
+/** Latest sheet payload for re-running customise-theme sync after UE loads. */
+let lastStylesheetSnapshot = {};
+
+/** Keep snapshot in sync after customise-theme save (avoids stale re-sync from aue events). */
+export function setLastStylesheetSnapshotForTheme(sheet) {
+  lastStylesheetSnapshot = sheet && typeof sheet === 'object' ? sheet : {};
+}
 
 async function applyTheme() {
   try {
-    lastStylesheetDataForMetadata = await fetchStylesheetJson();
+    lastStylesheetSnapshot = await fetchStylesheetJson();
   } catch (err) {
     console.error('Error fetching remote stylesheet.json:', err);
-    lastStylesheetDataForMetadata = {};
+    lastStylesheetSnapshot = {};
   }
-  injectThemeStyleTag(lastStylesheetDataForMetadata);
-  prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
+  removeLegacyThemeMetaTags();
+  injectThemeStyleTag(lastStylesheetSnapshot);
+  syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
 }
 
 document.addEventListener(
   'aue:initialized',
   () => {
-    prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
+    removeLegacyThemeMetaTags();
+    syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
     requestAnimationFrame(() => {
-      prefillPageMetadataFromStylesheet(lastStylesheetDataForMetadata);
+      syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
     });
   },
   { passive: true },
