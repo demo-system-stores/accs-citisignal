@@ -96,14 +96,10 @@ export default async function decorate(block) {
 
       const syncColorToText = () => {
         textInput.value = colorInput.value;
-        textInput.setAttribute('value', textInput.value);
-        colorInput.setAttribute('value', colorInput.value);
       };
       const syncTextToColor = () => {
         const hex = normalizeHexInput(textInput.value);
         if (/^#[0-9a-f]{6}$/.test(hex)) colorInput.value = hex;
-        textInput.setAttribute('value', textInput.value);
-        colorInput.setAttribute('value', colorInput.value);
       };
 
       colorInput.addEventListener('input', syncColorToText);
@@ -112,9 +108,6 @@ export default async function decorate(block) {
       inputWrap.append(colorInput, textInput);
       fields[key] = { textInput, colorInput };
     } else {
-      textInput.addEventListener('input', () => {
-        textInput.setAttribute('value', textInput.value);
-      });
       inputWrap.append(textInput);
       fields[key] = { textInput, colorInput: null };
     }
@@ -144,16 +137,10 @@ export default async function decorate(block) {
       const val = String(raw).trim();
       const { textInput, colorInput } = fields[key];
       textInput.value = val;
-      textInput.setAttribute('value', val);
       if (colorInput && /^#[0-9a-fA-F]{6}$/.test(normalizeHexInput(val))) {
-        const hex = normalizeHexInput(val);
-        colorInput.value = hex;
-        colorInput.setAttribute('value', hex);
+        colorInput.value = normalizeHexInput(val);
       } else if (colorInput && !val) {
         colorInput.value = '#000000';
-        colorInput.setAttribute('value', '#000000');
-      } else if (colorInput) {
-        colorInput.setAttribute('value', colorInput.value);
       }
     });
   }
@@ -195,12 +182,10 @@ export default async function decorate(block) {
   block.textContent = '';
   block.append(root);
 
-  setValues({});
-
   try {
     const sheet = await fetchStylesheetJson();
     setValues(sheetValueMap(sheet));
   } catch {
-    /* stylesheet optional; values already set from authored block */
+    setValues({});
   }
 }

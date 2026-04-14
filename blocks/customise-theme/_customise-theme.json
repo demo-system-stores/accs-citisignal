@@ -16,7 +16,7 @@
             { "name": "secondary-text", "selector": "div:nth-child(1)>div:nth-child(4)>div:nth-child(2)>input:nth-child(2)[value]"},
             { "name": "menu-background", "selector": "div:nth-child(1)>div:nth-child(5)>div:nth-child(2)>input:nth-child(2)[value]"},
             { "name": "menu-text-color", "selector": "div:nth-child(1)>div:nth-child(6)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "fonts", "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(1)[value]"}
+            { "name": "fonts", "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(2)[value]"}
           ]
         }
       }
