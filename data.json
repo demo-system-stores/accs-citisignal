@@ -1,0 +1,41 @@
+{
+    "total": 7,
+    "limit": 7,
+    "offset": 0,
+    "data": [
+        {
+            "key": "theme-primary",
+            "value": "#8821f4"
+        },
+        {
+            "key": "theme-secondary",
+            "value": "#000000"
+        },
+        {
+            "key": "primary-text",
+            "value": "#ffffff"
+        },
+        {
+            "key": "secondary-text",
+            "value": "#000000"
+        },
+        {
+            "key": "menu-background",
+            "value": "#ffffff"
+        },
+        {
+            "key": "menu-text-color",
+            "value": "#000000"
+        },
+        {
+            "key": "fonts",
+            "value": "adobe-clean, roboto, roboto-fallback, system-ui, sans-serif"
+        }
+    ],
+    ":colWidths": [
+        260,
+        690
+    ],
+    ":sheetname": "data",
+    ":type": "sheet"
+}

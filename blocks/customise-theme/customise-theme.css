@@ -4,6 +4,7 @@
   border: 1px solid var(--color-neutral-300, #ccc);
   border-radius: 8px;
   background: var(--color-neutral-200, #fafafa);
+  box-sizing: border-box;
 }
 
 .customise-theme-row {

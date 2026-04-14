@@ -17,6 +17,13 @@ export const THEME_STYLE_ATTR = 'data-accs-stylesheet-root';
 
 const DA_TOKEN_URL = 'https://285361-demosystemcommerce-devpankaj.adobeioruntime.net/api/v1/web/dsc-eds-api/da-access-token';
 
+// Reads /data.json from the root of the site
+async function fetchLocalDataJson() {
+  const res = await fetch('/data.json', { cache: 'reload' });
+  if (!res.ok) throw new Error(`Failed to load /data.json as fallback: ${res.status}`);
+  return res.json();
+}
+
 export function parseDaSiteContext() {
   const host = window.location.hostname;
   const hostParts = host.split('--');
@@ -54,6 +61,7 @@ export async function fetchDaAccessToken() {
 
 /**
  * Fetches stylesheet.json from DA Source API.
+ * If unavailable (404 or not ok), seeds it with /data.json from the site root.
  * @returns {Promise<{ ':type'?: string, data?: Array<{ key: string, value: string }> }>}
  */
 export async function fetchStylesheetJson() {
@@ -61,13 +69,29 @@ export async function fetchStylesheetJson() {
   const { org, repo } = parseDaSiteContext();
   const path = getStylesheetSourcePath(org, repo);
   const stylesheetUrl = `https://admin.da.live/source/${path}`;
-  const stylesheetResponse = await fetch(stylesheetUrl, {
-    headers: {
-      Authorization: `Bearer ${daAccessToken}`,
-    },
-  });
-  if (!stylesheetResponse.ok) {
-    throw new Error(`Failed to fetch stylesheet.json: ${stylesheetResponse.status}`);
+  let stylesheetResponse;
+  try {
+    stylesheetResponse = await fetch(stylesheetUrl, {
+      headers: {
+        Authorization: `Bearer ${daAccessToken}`,
+      },
+    });
+  } catch (e) {
+    // Network failure, attempt fallback below
+    stylesheetResponse = undefined;
+  }
+
+  if (!stylesheetResponse || !stylesheetResponse.ok) {
+    // Only seed if 404 or generally not ok (treat all errors as seed instruction)
+    let seedSheet = {};
+    try {
+      seedSheet = await fetchLocalDataJson();
+      await postStylesheetJson(seedSheet);
+    } catch (seedError) {
+      throw new Error(`Failed to fetch or seed stylesheet.json: ${seedError}`);
+    }
+    // After seeding, return the just-fetched seedSheet
+    return seedSheet;
   }
   return stylesheetResponse.json();
 }
@@ -77,6 +101,7 @@ export async function fetchStylesheetJson() {
  * @param {object} sheetObject Full sheet document including :type and data[]
  */
 export async function postStylesheetJson(sheetObject) {
+  console.log('postStylesheetJson', sheetObject);
   const daAccessToken = await fetchDaAccessToken();
   const { org, repo } = parseDaSiteContext();
   const path = getStylesheetSourcePath(org, repo);
@@ -166,7 +191,7 @@ async function applyTheme() {
   try {
     sheet = await fetchStylesheetJson();
   } catch (err) {
-    console.error('Error fetching remote stylesheet.json:', err);
+    console.error('Error fetching or seeding stylesheet.json:', err);
     sheet = {};
   }
   removeLegacyThemeMetaTags();
