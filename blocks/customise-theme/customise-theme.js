@@ -101,7 +101,7 @@ export default async function decorate(block) {
   actions.className = 'customise-theme-actions';
   const saveBtn = document.createElement('button');
   saveBtn.type = 'button';
-  saveBtn.className = 'button';
+  saveBtn.className = 'button secondary';
   saveBtn.textContent = 'Save theme';
   const status = document.createElement('p');
   status.className = 'customise-theme-status';
