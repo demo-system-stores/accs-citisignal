@@ -165,13 +165,6 @@ function themeValueMapFromSheet(stylesheetData) {
   return map;
 }
 
-function notifyUeCustomiseThemeBlock(block) {
-  block.querySelectorAll('input.customise-theme-text[data-aue-prop]').forEach((input) => {
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  });
-}
-
 function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
   block.querySelectorAll('input.customise-theme-text[data-aue-prop]').forEach((input) => {
     const key = input.getAttribute('data-aue-prop');
@@ -179,7 +172,6 @@ function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
     const val = valueByKey[key];
     if (val == null || val === '') return;
     input.value = val;
-    input.defaultValue = val;
     input.setAttribute('value', val);
     const row = input.closest('.customise-theme-row');
     const color = row?.querySelector('input.customise-theme-color');
@@ -224,20 +216,13 @@ function removeLegacyThemeMetaTags() {
  */
 export function syncThemeSheetToCustomiseThemeBlocks(stylesheetData) {
   const map = themeValueMapFromSheet(stylesheetData);
-  const hasMap = Object.keys(map).length > 0;
+  if (Object.keys(map).length === 0) return;
   document.querySelectorAll('.customise-theme').forEach((block) => {
     if (block.querySelector('input.customise-theme-text[data-aue-prop]')) {
-      if (hasMap) syncDecoratedCustomiseThemeBlock(block, map);
-    } else if (hasMap) {
+      syncDecoratedCustomiseThemeBlock(block, map);
+    } else {
       syncAuthoringTableCustomiseThemeBlock(block, map);
     }
-  });
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.customise-theme').forEach((block) => {
-      if (block.querySelector('input.customise-theme-text[data-aue-prop]')) {
-        notifyUeCustomiseThemeBlock(block);
-      }
-    });
   });
 }
 

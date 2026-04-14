@@ -96,14 +96,12 @@ export default async function decorate(block) {
 
       const syncColorToText = () => {
         textInput.value = colorInput.value;
-        textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
         colorInput.setAttribute('value', colorInput.value);
       };
       const syncTextToColor = () => {
         const hex = normalizeHexInput(textInput.value);
         if (/^#[0-9a-f]{6}$/.test(hex)) colorInput.value = hex;
-        textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
         colorInput.setAttribute('value', colorInput.value);
       };
@@ -115,7 +113,6 @@ export default async function decorate(block) {
       fields[key] = { textInput, colorInput };
     } else {
       textInput.addEventListener('input', () => {
-        textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
       });
       inputWrap.append(textInput);
@@ -124,10 +121,6 @@ export default async function decorate(block) {
 
     const ueSrc = ueSources.get(key);
     if (ueSrc) moveInstrumentation(ueSrc, textInput);
-    textInput.setAttribute('data-aue-prop', key);
-    textInput.setAttribute('data-aue-type', 'text');
-    textInput.setAttribute('data-aue-label', THEME_LABELS[key] || key);
-    textInput.removeAttribute('data-aue-resource');
 
     row.append(label, inputWrap);
     root.append(row);
@@ -151,7 +144,6 @@ export default async function decorate(block) {
       const val = String(raw).trim();
       const { textInput, colorInput } = fields[key];
       textInput.value = val;
-      textInput.defaultValue = val;
       textInput.setAttribute('value', val);
       if (colorInput && /^#[0-9a-fA-F]{6}$/.test(normalizeHexInput(val))) {
         const hex = normalizeHexInput(val);
@@ -163,14 +155,6 @@ export default async function decorate(block) {
       } else if (colorInput) {
         colorInput.setAttribute('value', colorInput.value);
       }
-    });
-  }
-
-  function notifyUeInputsUpdated() {
-    THEME_STYLESHEET_KEYS.forEach((key) => {
-      const { textInput } = fields[key];
-      textInput.dispatchEvent(new Event('input', { bubbles: true }));
-      textInput.dispatchEvent(new Event('change', { bubbles: true }));
     });
   }
 
@@ -219,8 +203,4 @@ export default async function decorate(block) {
   } catch {
     /* stylesheet optional; values already set from authored block */
   }
-
-  requestAnimationFrame(() => {
-    notifyUeInputsUpdated();
-  });
 }
