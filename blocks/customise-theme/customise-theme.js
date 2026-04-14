@@ -80,6 +80,9 @@ export default async function decorate(block) {
     const inputWrap = document.createElement('div');
     inputWrap.className = 'customise-theme-inputs';
 
+    const ueMirror = document.createElement('p');
+    ueMirror.className = 'customise-theme-ue-sync';
+
     const textInput = document.createElement('input');
     textInput.type = 'text';
     textInput.id = `customise-theme-${key}`;
@@ -99,6 +102,7 @@ export default async function decorate(block) {
         textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
         colorInput.setAttribute('value', colorInput.value);
+        ueMirror.textContent = textInput.value;
       };
       const syncTextToColor = () => {
         const hex = normalizeHexInput(textInput.value);
@@ -106,28 +110,47 @@ export default async function decorate(block) {
         textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
         colorInput.setAttribute('value', colorInput.value);
+        ueMirror.textContent = textInput.value;
       };
 
       colorInput.addEventListener('input', syncColorToText);
       textInput.addEventListener('input', syncTextToColor);
 
-      inputWrap.append(colorInput, textInput);
-      fields[key] = { textInput, colorInput };
+      inputWrap.append(ueMirror, colorInput, textInput);
+      fields[key] = { textInput, colorInput, ueMirror };
     } else {
       textInput.addEventListener('input', () => {
         textInput.defaultValue = textInput.value;
         textInput.setAttribute('value', textInput.value);
+        ueMirror.textContent = textInput.value;
       });
-      inputWrap.append(textInput);
-      fields[key] = { textInput, colorInput: null };
+      inputWrap.append(ueMirror, textInput);
+      fields[key] = { textInput, colorInput: null, ueMirror };
     }
 
     const ueSrc = ueSources.get(key);
-    if (ueSrc) moveInstrumentation(ueSrc, textInput);
-    textInput.setAttribute('data-aue-prop', key);
-    textInput.setAttribute('data-aue-type', 'text');
-    textInput.setAttribute('data-aue-label', THEME_LABELS[key] || key);
-    textInput.removeAttribute('data-aue-resource');
+    if (ueSrc) moveInstrumentation(ueSrc, ueMirror);
+    ueMirror.setAttribute('data-aue-prop', key);
+    ueMirror.setAttribute('data-aue-type', 'text');
+    ueMirror.setAttribute('data-aue-label', THEME_LABELS[key] || key);
+    ueMirror.removeAttribute('data-aue-resource');
+
+    ['data-aue-prop', 'data-aue-type', 'data-aue-label', 'data-aue-resource'].forEach((a) => {
+      textInput.removeAttribute(a);
+    });
+
+    const mirrorObserver = new MutationObserver(() => {
+      const fromMirror = ueMirror.textContent ?? '';
+      if (textInput.value === fromMirror) return;
+      textInput.value = fromMirror;
+      textInput.defaultValue = fromMirror;
+      textInput.setAttribute('value', fromMirror);
+      if (fields[key].colorInput) {
+        const hex = normalizeHexInput(fromMirror);
+        if (/^#[0-9a-f]{6}$/.test(hex)) fields[key].colorInput.value = hex;
+      }
+    });
+    mirrorObserver.observe(ueMirror, { characterData: true, subtree: true, childList: true });
 
     row.append(label, inputWrap);
     root.append(row);
@@ -149,10 +172,11 @@ export default async function decorate(block) {
     THEME_STYLESHEET_KEYS.forEach((key) => {
       const raw = map[key] ?? initialFromBlock[key] ?? '';
       const val = String(raw).trim();
-      const { textInput, colorInput } = fields[key];
+      const { textInput, colorInput, ueMirror } = fields[key];
       textInput.value = val;
       textInput.defaultValue = val;
       textInput.setAttribute('value', val);
+      ueMirror.textContent = val;
       if (colorInput && /^#[0-9a-fA-F]{6}$/.test(normalizeHexInput(val))) {
         const hex = normalizeHexInput(val);
         colorInput.value = hex;
@@ -168,9 +192,9 @@ export default async function decorate(block) {
 
   function notifyUeInputsUpdated() {
     THEME_STYLESHEET_KEYS.forEach((key) => {
-      const { textInput } = fields[key];
-      textInput.dispatchEvent(new Event('input', { bubbles: true }));
-      textInput.dispatchEvent(new Event('change', { bubbles: true }));
+      const { ueMirror } = fields[key];
+      ueMirror.dispatchEvent(new Event('input', { bubbles: true }));
+      ueMirror.dispatchEvent(new Event('change', { bubbles: true }));
     });
   }
 
