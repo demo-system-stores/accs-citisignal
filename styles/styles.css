@@ -132,14 +132,12 @@
   --type-fixed-font-family: var(--fonts, adobe-clean, "Roboto Mono", menlo, consolas, "Liberation Mono", monospace, system-ui, sans-serif);
   --background-color: var(--color-neutral-50);
   --nav-height: 6.4rem;
-
-
   --site-theme-primary: var(--theme-primary, #8821f4);
-  --site-theme-secondary: var(--theme-secondary, #000000);
-  --site-primary-text: var(--primary-text, #ffffff);
-  --site-secondary-text: var(--secondary-text, #000000);
-  --nav-background-color: var(--menu-background, #ffffff);
-  --nav-text-color: var(--menu-text-color, #000000);
+  --site-theme-secondary: var(--theme-secondary, #000);
+  --site-primary-text: var(--primary-text, #fff);
+  --site-secondary-text: var(--secondary-text, #000);
+  --nav-background-color: var(--menu-background, #fff);
+  --nav-text-color: var(--menu-text-color, #000);
 }
 
 /* fallback font */
