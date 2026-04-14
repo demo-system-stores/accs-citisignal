@@ -14,7 +14,7 @@
 .hero h1 {
   margin-left: auto;
   margin-right: auto;
-  color: var(--background-color);
+  color: var(--site-primary-text);
   position: absolute;
   top: initial;
   bottom: 10px;
@@ -32,7 +32,7 @@
 .hero p {
   max-width: 1200px;
   margin: 0 auto;
-  color: var(--background-color);
+  color: var(--site-primary-text);
   position: relative;
 }
 

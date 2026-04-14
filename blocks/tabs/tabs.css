@@ -24,8 +24,8 @@
   border: 1px solid #dadada;
   border-radius: 0;
   padding: 15px 30px;
-  background-color: var(--color-brand-1000);
-  color: var(--color-neutral-50);
+  background-color: transparent;
+  color: var(--site-primary-text);
   line-height: unset;
   text-align: initial;
   text-overflow: unset;
@@ -43,16 +43,16 @@
 
 
 .tabs .tabs-list button:hover {
-  background-color: var(--color-neutral-500);
-  color: var(--color-brand-1000);
+  background-color: var(--site-theme-primary);
+  color: var(--site-primary-text);
 }
 
 
 
 .tabs .tabs-list button[aria-selected='true'] {
-  border-bottom: 1px solid var(--background-color);
-  background-color: var(--background-color);
-  color: var(--color-brand-1000);
+  border-bottom: 1px solid var(--site-theme-secondary);
+  background-color: var(--site-theme-secondary);
+  color: var(--site-primary-text);
 }
 
 .tabs .tabs-panel {

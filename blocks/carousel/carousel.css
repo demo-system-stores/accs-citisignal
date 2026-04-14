@@ -71,7 +71,7 @@
 .carousel .carousel-slide .carousel-slide-content {
   z-index: 1;
   padding: 16px;
-  color: var(--color-neutral-50);
+  color: var(--site-primary-text);
   background-color: rgb(0 0 0 / 30%);
   position: relative;
   width: var(--slide-content-width, auto);
@@ -87,7 +87,7 @@
   justify-content: center;
   gap: 6px 12px;
   padding: 12px;
-  background-color: var(--light-color);
+  background-color: var(--light-color); 
   line-height: 0;
 }
 

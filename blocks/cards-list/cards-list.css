@@ -10,7 +10,7 @@
 .cards-list > div {
     flex-direction: column;
     border-radius: var(--shape-border-radius-2);
-    background-color: var(--color-neutral-50);
+    background-color: var(--site-theme-secondary);
 }
 
 .card-item {
@@ -20,7 +20,7 @@
 
 .cards-list > div h3 {
     font-weight: bold;
-    color: var(--color-neutral-900);
+    color: var(--site-primary-text);
     line-height: 1em;
     display: block;
     width: 100%;
@@ -31,7 +31,7 @@
     margin-top: var(--spacing-small);
     font: var(--type-body-1-strong-font);
     letter-spacing: var(--type-body-1-strong-letter-spacing);
-    color: var(--color-neutral-900);
+    color: var(--site-primary-text);
 }
 
 .cards-list > div img {

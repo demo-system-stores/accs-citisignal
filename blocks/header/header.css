@@ -8,7 +8,7 @@
 
 /* header and nav layout */
 header .nav-wrapper {
-  background-color: var(--background-color);
+  background-color: var(--nav-background-color);
   width: 100%;
   z-index: 3;
   position: fixed;
@@ -235,6 +235,7 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li a {
     text-decoration: none;
+    color: inherit;
   }
 
   header nav .nav-sections ul {
@@ -256,10 +257,11 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
+    color: var(--nav-text-color);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper {
-    background-color: var(--color-neutral-50);
+    background-color: var(--site-theme-secondary);
     box-sizing: border-box;
     left: 0;
     max-height: var(--desktop-panel-max-height);
@@ -307,7 +309,7 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li:hover,
   header nav .nav-sections .nav-drop[aria-expanded='true'] {
     background-color: var(--color-neutral-200);
-    color: var(--main-color-accent);
+    color: var(--site-theme-primary);
   }
 }
 
@@ -316,7 +318,7 @@ header nav .nav-tools-panel {
   z-index: 100;
   position: absolute;
   box-shadow: var(--shape-shadow-2);
-  background: var(--background-color);
+  background: var(--site-theme-secondary);
   top: var(--nav-height);
   right: 0;
   width: 100%;
@@ -339,7 +341,7 @@ header nav .nav-tools {
 }
 
 header nav .nav-tools-wrapper > button {
-  color: var(--color-brand-700);
+  color: var(--site-primary-text);
   background: transparent;
   padding: 10px;
   border: unset;
@@ -360,7 +362,7 @@ header nav .nav-tools button.nav-cart-button[data-count]::after {
   position: absolute;
   top: 0;
   right: -2px;
-  background-color: var(--color-brand-700);
+  background-color: var(--site-theme-primary);
   color: var(--color-neutral-100);
   border-radius: 50%;
   width: 1.75em;
