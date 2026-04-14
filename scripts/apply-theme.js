@@ -172,11 +172,16 @@ function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
     const val = valueByKey[key];
     if (val == null || val === '') return;
     input.value = val;
+    input.setAttribute('value', val);
     const row = input.closest('.customise-theme-row');
     const color = row?.querySelector('input.customise-theme-color');
     if (color) {
       const hex = val.startsWith('#') ? val : `#${val}`;
-      if (/^#[0-9a-fA-F]{6}$/.test(hex)) color.value = hex.toLowerCase();
+      if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+        const normalized = hex.toLowerCase();
+        color.value = normalized;
+        color.setAttribute('value', normalized);
+      }
     }
   });
 }

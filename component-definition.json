@@ -230,7 +230,7 @@
                 },
                 {
                   "name": "fonts",
-                  "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(2)[value]"
+                  "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(1)[value]"
                 }
               ]
             }
