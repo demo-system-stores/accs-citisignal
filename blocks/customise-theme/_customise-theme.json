@@ -10,13 +10,13 @@
           "rows": 1,
           "columns": 1,
           "fields": [
-            { "name": "theme-primary", "selector": "div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "theme-secondary", "selector": "div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "primary-text", "selector": "div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "secondary-text", "selector": "div:nth-child(1)>div:nth-child(4)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "menu-background", "selector": "div:nth-child(1)>div:nth-child(5)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "menu-text-color", "selector": "div:nth-child(1)>div:nth-child(6)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "fonts", "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(1)[value]"}
+            { "name": "theme-primary", "selector": "input.customise-theme-text[data-aue-prop='theme-primary'][value]"},
+            { "name": "theme-secondary", "selector": "input.customise-theme-text[data-aue-prop='theme-secondary'][value]"},
+            { "name": "primary-text", "selector": "input.customise-theme-text[data-aue-prop='primary-text'][value]"},
+            { "name": "secondary-text", "selector": "input.customise-theme-text[data-aue-prop='secondary-text'][value]"},
+            { "name": "menu-background", "selector": "input.customise-theme-text[data-aue-prop='menu-background'][value]"},
+            { "name": "menu-text-color", "selector": "input.customise-theme-text[data-aue-prop='menu-text-color'][value]"},
+            { "name": "fonts", "selector": "input.customise-theme-text[data-aue-prop='fonts'][value]"}
           ]
         }
       }
