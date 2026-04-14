@@ -1,14 +1,10 @@
-import { readBlockConfig, toClassName } from '../../scripts/aem.js';
 import {
   THEME_STYLESHEET_KEYS,
   fetchStylesheetJson,
   postStylesheetJson,
   injectThemeStyleTag,
   mergeThemeIntoStylesheet,
-  syncThemeSheetToCustomiseThemeBlocks,
-  setLastStylesheetSnapshotForTheme,
 } from '../../scripts/apply-theme.js';
-import { moveInstrumentation } from '../../scripts/ue-utils.js';
 
 const THEME_LABELS = {
   'theme-primary': 'Theme primary',
@@ -49,21 +45,6 @@ function sheetValueMap(stylesheetData) {
 }
 
 export default async function decorate(block) {
-  const initialFromBlock = readBlockConfig(block);
-  /** @type {Map<string, Element>} */
-  const ueSources = new Map();
-  [...block.querySelectorAll(':scope > div')].forEach((row) => {
-    const cols = [...row.children];
-    if (cols.length < 2) return;
-    const key = toClassName(cols[0].textContent);
-    if (!THEME_STYLESHEET_KEYS.includes(key)) return;
-    const valCell = cols[1];
-    const instrumented = valCell.matches('[data-aue-prop]')
-      ? valCell
-      : valCell.querySelector('[data-aue-prop]');
-    if (instrumented) ueSources.set(key, instrumented);
-  });
-
   const root = document.createElement('div');
   root.className = 'customise-theme-root';
 
@@ -112,9 +93,6 @@ export default async function decorate(block) {
       fields[key] = { textInput, colorInput: null };
     }
 
-    const ueSrc = ueSources.get(key);
-    if (ueSrc) moveInstrumentation(ueSrc, textInput);
-
     row.append(label, inputWrap);
     root.append(row);
   });
@@ -133,7 +111,7 @@ export default async function decorate(block) {
 
   function setValues(map) {
     THEME_STYLESHEET_KEYS.forEach((key) => {
-      const raw = map[key] ?? initialFromBlock[key] ?? '';
+      const raw = map[key] ?? '';
       const val = String(raw).trim();
       const { textInput, colorInput } = fields[key];
       textInput.value = val;
@@ -168,9 +146,7 @@ export default async function decorate(block) {
       }
       const merged = mergeThemeIntoStylesheet(current, collectThemeValues());
       await postStylesheetJson(merged);
-      setLastStylesheetSnapshotForTheme(merged);
       injectThemeStyleTag(merged);
-      syncThemeSheetToCustomiseThemeBlocks(merged);
       status.textContent = 'Theme saved.';
     } catch (err) {
       status.textContent = err instanceof Error ? err.message : 'Save failed.';

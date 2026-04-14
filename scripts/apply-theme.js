@@ -2,9 +2,6 @@
  * Theme tokens stored in DA `stylesheet.json` (keys become `--{key}` on :root).
  * Edited in authoring via the customise-theme block (not page metadata).
  */
-// eslint-disable-next-line import/no-cycle -- aem does not import apply-theme
-import { toClassName } from './aem.js';
-
 export const THEME_STYLESHEET_KEYS = [
   'theme-primary',
   'theme-secondary',
@@ -157,46 +154,6 @@ export function injectThemeStyleTag(stylesheetData) {
   }
 }
 
-function themeValueMapFromSheet(stylesheetData) {
-  const map = {};
-  themeRowsFromSheet(stylesheetData).forEach(({ key, value }) => {
-    map[key] = String(value).trim();
-  });
-  return map;
-}
-
-function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
-  block.querySelectorAll('input.customise-theme-text[data-aue-prop]').forEach((input) => {
-    const key = input.getAttribute('data-aue-prop');
-    if (!key || !allowedThemeKeys.has(key)) return;
-    const val = valueByKey[key];
-    if (val == null || val === '') return;
-    input.value = val;
-    const row = input.closest('.customise-theme-row');
-    const color = row?.querySelector('input.customise-theme-color');
-    if (color) {
-      const hex = val.startsWith('#') ? val : `#${val}`;
-      if (/^#[0-9a-fA-F]{6}$/.test(hex)) color.value = hex.toLowerCase();
-    }
-  });
-}
-
-function syncAuthoringTableCustomiseThemeBlock(block, valueByKey) {
-  block.querySelectorAll(':scope > div').forEach((row) => {
-    const cols = [...row.children];
-    if (cols.length < 2) return;
-    const key = toClassName(cols[0].textContent);
-    if (!allowedThemeKeys.has(key)) return;
-    const val = valueByKey[key];
-    if (val == null || val === '') return;
-    const valCell = cols[1];
-    const target = valCell.matches('[data-aue-prop]')
-      ? valCell
-      : valCell.querySelector('[data-aue-prop]') || valCell.querySelector('p') || valCell;
-    target.textContent = val;
-  });
-}
-
 /** Remove legacy head metas from the old page-metadata theme prefill. */
 function removeLegacyThemeMetaTags() {
   THEME_STYLESHEET_KEYS.forEach((key) => {
@@ -204,53 +161,16 @@ function removeLegacyThemeMetaTags() {
   });
 }
 
-/**
- * Pushes stylesheet theme values into customise-theme blocks for UE block properties.
- * Targets authored table cells or decorated inputs (data-aue-prop).
- * @param {{ data?: Array<{ key: string, value: string }> }} stylesheetData
- */
-export function syncThemeSheetToCustomiseThemeBlocks(stylesheetData) {
-  const map = themeValueMapFromSheet(stylesheetData);
-  if (Object.keys(map).length === 0) return;
-  document.querySelectorAll('.customise-theme').forEach((block) => {
-    if (block.querySelector('input.customise-theme-text[data-aue-prop]')) {
-      syncDecoratedCustomiseThemeBlock(block, map);
-    } else {
-      syncAuthoringTableCustomiseThemeBlock(block, map);
-    }
-  });
-}
-
-/** Latest sheet payload for re-running customise-theme sync after UE loads. */
-let lastStylesheetSnapshot = {};
-
-/** Keep snapshot in sync after customise-theme save (avoids stale re-sync from aue events). */
-export function setLastStylesheetSnapshotForTheme(sheet) {
-  lastStylesheetSnapshot = sheet && typeof sheet === 'object' ? sheet : {};
-}
-
 async function applyTheme() {
+  let sheet = {};
   try {
-    lastStylesheetSnapshot = await fetchStylesheetJson();
+    sheet = await fetchStylesheetJson();
   } catch (err) {
     console.error('Error fetching remote stylesheet.json:', err);
-    lastStylesheetSnapshot = {};
+    sheet = {};
   }
   removeLegacyThemeMetaTags();
-  injectThemeStyleTag(lastStylesheetSnapshot);
-  syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
+  injectThemeStyleTag(sheet);
 }
-
-document.addEventListener(
-  'aue:initialized',
-  () => {
-    removeLegacyThemeMetaTags();
-    syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
-    requestAnimationFrame(() => {
-      syncThemeSheetToCustomiseThemeBlocks(lastStylesheetSnapshot);
-    });
-  },
-  { passive: true },
-);
 
 applyTheme();

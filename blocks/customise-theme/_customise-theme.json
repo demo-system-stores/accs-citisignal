@@ -9,15 +9,7 @@
           "name": "customise-theme",
           "rows": 1,
           "columns": 1,
-          "fields": [
-            { "name": "theme-primary", "selector": "div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "theme-secondary", "selector": "div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "primary-text", "selector": "div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "secondary-text", "selector": "div:nth-child(1)>div:nth-child(4)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "menu-background", "selector": "div:nth-child(1)>div:nth-child(5)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "menu-text-color", "selector": "div:nth-child(1)>div:nth-child(6)>div:nth-child(2)>input:nth-child(2)[value]"},
-            { "name": "fonts", "selector": "div:nth-child(1)>div:nth-child(7)>div:nth-child(2)>input:nth-child(2)[value]"}
-          ]
+          "fields": []
         }
       }
     }
@@ -25,50 +17,7 @@
   "models": [
     {
       "id": "customise-theme",
-      "fields": [
-        {
-          "component": "text",
-          "name": "theme-primary",
-          "label": "Theme primary",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "theme-secondary",
-          "label": "Theme secondary",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "primary-text",
-          "label": "Primary text",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "secondary-text",
-          "label": "Secondary text",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "menu-background",
-          "label": "Menu background",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "menu-text-color",
-          "label": "Menu text color",
-          "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "fonts",
-          "label": "Fonts",
-          "valueType": "string"
-        }
-      ]
+      "fields": []
     }
   ],
   "filters": []
