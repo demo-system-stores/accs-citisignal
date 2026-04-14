@@ -195,6 +195,19 @@
           }
         },
         {
+          "title": "Customise theme",
+          "id": "customise-theme",
+          "model": "customise-theme",
+          "plugins": {
+            "da": {
+              "name": "customise-theme",
+              "rows": 1,
+              "columns": 1,
+              "fields": []
+            }
+          }
+        },
+        {
           "title": "Fragment",
           "id": "fragment",
           "model": "fragment",

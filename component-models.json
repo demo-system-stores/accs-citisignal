@@ -245,6 +245,10 @@
     ]
   },
   {
+    "id": "customise-theme",
+    "fields": []
+  },
+  {
     "id": "fragment",
     "fields": [
       {
