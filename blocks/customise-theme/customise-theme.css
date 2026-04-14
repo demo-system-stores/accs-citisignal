@@ -1,3 +1,13 @@
+
+.customise-theme-container {
+  display: none;
+}
+
+.adobe-ue-edit .customise-theme-container,
+.adobe-ue-preview .customise-theme-container {
+  display: block;
+}
+
 .customise-theme-root {
   width: 100%;
   padding: 1rem;
