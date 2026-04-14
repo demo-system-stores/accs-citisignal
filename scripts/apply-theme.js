@@ -165,26 +165,13 @@ function themeValueMapFromSheet(stylesheetData) {
   return map;
 }
 
-/**
- * Sets both the live value and the HTML value attribute so Universal Editor
- * block properties and the in-page inputs stay aligned.
- * @param {HTMLInputElement} input
- * @param {string} val
- */
-export function setUeTextInputValue(input, val) {
-  const s = val == null ? '' : String(val);
-  input.value = s;
-  if (s) input.setAttribute('value', s);
-  else input.removeAttribute('value');
-}
-
 function syncDecoratedCustomiseThemeBlock(block, valueByKey) {
   block.querySelectorAll('input.customise-theme-text[data-aue-prop]').forEach((input) => {
     const key = input.getAttribute('data-aue-prop');
     if (!key || !allowedThemeKeys.has(key)) return;
     const val = valueByKey[key];
     if (val == null || val === '') return;
-    setUeTextInputValue(input, val);
+    input.value = val;
     const row = input.closest('.customise-theme-row');
     const color = row?.querySelector('input.customise-theme-color');
     if (color) {
@@ -225,11 +212,11 @@ function removeLegacyThemeMetaTags() {
 export function syncThemeSheetToCustomiseThemeBlocks(stylesheetData) {
   const map = themeValueMapFromSheet(stylesheetData);
   if (Object.keys(map).length === 0) return;
-  document.querySelectorAll('.customise-theme').forEach((blockEl) => {
-    if (blockEl.querySelector('input.customise-theme-text[data-aue-prop]')) {
-      syncDecoratedCustomiseThemeBlock(blockEl, map);
+  document.querySelectorAll('.customise-theme').forEach((block) => {
+    if (block.querySelector('input.customise-theme-text[data-aue-prop]')) {
+      syncDecoratedCustomiseThemeBlock(block, map);
     } else {
-      syncAuthoringTableCustomiseThemeBlock(blockEl, map);
+      syncAuthoringTableCustomiseThemeBlock(block, map);
     }
   });
 }
