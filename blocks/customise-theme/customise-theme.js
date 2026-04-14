@@ -7,6 +7,7 @@ import {
   mergeThemeIntoStylesheet,
   syncThemeSheetToCustomiseThemeBlocks,
   setLastStylesheetSnapshotForTheme,
+  setUeTextInputValue,
 } from '../../scripts/apply-theme.js';
 import { moveInstrumentation } from '../../scripts/ue-utils.js';
 
@@ -46,6 +47,28 @@ function sheetValueMap(stylesheetData) {
     }
   });
   return map;
+}
+
+/**
+ * Ensures each theme field binds to the customise-theme model in Universal Editor:
+ * text type, correct prop name, and block resource/model when the cell had no AUE attrs.
+ * @param {HTMLElement} blockEl
+ * @param {HTMLInputElement} textInput
+ * @param {string} fieldKey model field name (e.g. theme-primary)
+ */
+function finalizeThemeFieldUeInstrumentation(blockEl, textInput, fieldKey) {
+  textInput.setAttribute('data-aue-type', 'text');
+  if (!textInput.hasAttribute('data-aue-prop')) {
+    textInput.setAttribute('data-aue-prop', fieldKey);
+  }
+  const resource = blockEl.getAttribute('data-aue-resource');
+  const model = blockEl.getAttribute('data-aue-model');
+  if (!textInput.hasAttribute('data-aue-resource') && resource) {
+    textInput.setAttribute('data-aue-resource', resource);
+  }
+  if (!textInput.hasAttribute('data-aue-model') && model) {
+    textInput.setAttribute('data-aue-model', model);
+  }
 }
 
 export default async function decorate(block) {
@@ -114,6 +137,7 @@ export default async function decorate(block) {
 
     const ueSrc = ueSources.get(key);
     if (ueSrc) moveInstrumentation(ueSrc, textInput);
+    finalizeThemeFieldUeInstrumentation(block, textInput, key);
 
     row.append(label, inputWrap);
     root.append(row);
@@ -136,7 +160,7 @@ export default async function decorate(block) {
       const raw = map[key] ?? initialFromBlock[key] ?? '';
       const val = String(raw).trim();
       const { textInput, colorInput } = fields[key];
-      textInput.value = val;
+      setUeTextInputValue(textInput, val);
       if (colorInput && /^#[0-9a-fA-F]{6}$/.test(normalizeHexInput(val))) {
         colorInput.value = normalizeHexInput(val);
       } else if (colorInput && !val) {
@@ -184,7 +208,10 @@ export default async function decorate(block) {
 
   try {
     const sheet = await fetchStylesheetJson();
-    setValues(sheetValueMap(sheet));
+    const map = sheetValueMap(sheet);
+    setValues(map);
+    syncThemeSheetToCustomiseThemeBlocks(sheet);
+    requestAnimationFrame(() => syncThemeSheetToCustomiseThemeBlocks(sheet));
   } catch {
     setValues({});
   }
