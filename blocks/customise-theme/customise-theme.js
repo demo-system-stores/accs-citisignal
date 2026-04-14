@@ -44,6 +44,17 @@ function sheetValueMap(stylesheetData) {
   return map;
 }
 
+// Default theme values from styles.css for the supported keys
+const DEFAULT_THEME_VALUES = {
+  'theme-primary': '#8821f4',
+  'theme-secondary': '#000000',
+  'primary-text': '#ffffff',
+  'secondary-text': '#000000',
+  'menu-background': '#ffffff',
+  'menu-text-color': '#000000',
+  fonts: 'adobe-clean, roboto, roboto-fallback, system-ui, sans-serif',
+};
+
 export default async function decorate(block) {
   const root = document.createElement('div');
   root.className = 'customise-theme-root';
@@ -99,14 +110,24 @@ export default async function decorate(block) {
 
   const actions = document.createElement('div');
   actions.className = 'customise-theme-actions';
+
+  // --- Add Set to Default button ---
+  const defaultBtn = document.createElement('button');
+  defaultBtn.type = 'button';
+  defaultBtn.className = 'button secondary';
+  defaultBtn.textContent = 'Set to default';
+  defaultBtn.addEventListener('click', () => {
+    setValues(DEFAULT_THEME_VALUES);
+  });
+
   const saveBtn = document.createElement('button');
   saveBtn.type = 'button';
-  saveBtn.className = 'button secondary';
+  saveBtn.className = 'button primary';
   saveBtn.textContent = 'Save theme';
   const status = document.createElement('p');
   status.className = 'customise-theme-status';
   status.setAttribute('role', 'status');
-  actions.append(saveBtn, status);
+  actions.append(defaultBtn, saveBtn, status);
   root.append(actions);
 
   function setValues(map) {
