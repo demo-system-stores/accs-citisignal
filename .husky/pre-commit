@@ -1,2 +1,13 @@
+#!/usr/bin/env sh
+
+# Git GUI clients (e.g. GitHub Desktop) often invoke hooks with a stripped PATH, so
+# `node` is missing even though it works in your terminal.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+[ -d "$HOME/.volta/bin" ] && export PATH="$HOME/.volta/bin:$PATH"
+if [ -z "${NVM_DIR-}" ]; then
+  NVM_DIR="$HOME/.nvm"
+fi
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
 node .husky/check-block-readme.js
 node .husky/pre-commit.mjs
