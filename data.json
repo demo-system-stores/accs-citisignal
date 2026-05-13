@@ -4,6 +4,10 @@
     "offset": 0,
     "data": [
         {
+            "key": "background-color",
+            "value": "#ffffff"
+        },
+        {
             "key": "theme-primary",
             "value": "#8821f4"
         },

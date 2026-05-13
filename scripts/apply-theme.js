@@ -3,6 +3,7 @@
  * Edited in authoring via the customise-theme block (not page metadata).
  */
 export const THEME_STYLESHEET_KEYS = [
+  'background-color',
   'theme-primary',
   'theme-secondary',
   'primary-text',

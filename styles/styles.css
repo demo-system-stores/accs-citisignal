@@ -130,7 +130,7 @@
 
   /* Additional tokens */
   --type-fixed-font-family: var(--fonts, adobe-clean, "Roboto Mono", menlo, consolas, "Liberation Mono", monospace, system-ui, sans-serif);
-  --background-color: var(--color-neutral-50);
+  --background-color: var(--background-color, --color-neutral-50);
   --nav-height: 6.4rem;
   --site-theme-primary: var(--theme-primary, #8821f4);
   --site-theme-secondary: var(--theme-secondary, #000);
