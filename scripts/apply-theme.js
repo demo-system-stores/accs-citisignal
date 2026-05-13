@@ -15,7 +15,7 @@ export const THEME_STYLESHEET_KEYS = [
 /** Attribute on the injected theme style element in document.head (idempotent updates). */
 export const THEME_STYLE_ATTR = 'data-accs-stylesheet-root';
 
-const DA_TOKEN_URL = 'https://285361-demosystemcommerce-devpankaj.adobeioruntime.net/api/v1/web/dsc-eds-api/da-access-token';
+const DA_TOKEN_URL = 'https://285361-demosystemcommerce-poccustomtheme.adobeioruntime.net/api/v1/web/demosystemcommerce/da-access-token';
 
 // Reads /data.json from the root of the site
 async function fetchLocalDataJson() {
