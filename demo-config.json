@@ -28,6 +28,7 @@
         "store-url": "https://main--accs-citisignal--demo-system-stores.aem.live/",
         "store-view-id": 1,
         "store-view-name": "Default Store View",
+        "website-code": "base",
         "website-id": 1,
         "website-name": "Main Website"
       },

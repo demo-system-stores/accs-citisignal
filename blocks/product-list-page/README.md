@@ -2,191 +2,63 @@
 
 ## Overview
 
-The Product List Page block provides a comprehensive product discovery interface that displays search results or category product listings with filtering, sorting, and pagination capabilities. It integrates Adobe Commerce's Product Discovery dropins with wishlist and cart functionality.
+The Product List Page block powers search and category listing pages using the storefront-product-discovery dropin. It renders faceted search results with sort, filters, pagination, product cards (with add-to-cart and wishlist), and keeps the URL in sync with search state. The block supports two modes: **search page** (full-text search with optional filters) and **category page** (products in a category, optionally filtered).
 
-## Purpose
+## Configuration Options
 
-- Display products from search queries or category pages
-- Provide faceted search/filtering capabilities
-- Enable product sorting and pagination
-- Integrate wishlist and add-to-cart functionality
-- Handle URL parameters for deep linking to search states
+Block configuration is read via `readBlockConfig(block)`.
 
-## Configuration
+| Option   | Effect |
+|----------|--------|
+| `urlpath` | When set, the block runs in **category page** mode: it filters by `categoryPath` and shows all products in that category. When absent, the block runs in **search page** mode and uses the `q` URL parameter as the search phrase. The value is also stored on the block as `data-urlpath` for use by other blocks (e.g. enrichment). |
+| `pageSize` | Number of products per page. Defaults to `9` if not set or invalid. |
 
-The block accepts the following configuration options via block metadata:
+## Integration
 
-| Option | Description | Example |
-|--------|-------------|---------|
-| `urlpath` | Category URL path for category pages | `gear/bags` |
+### URL Parameters
 
-### Example Configuration
+Search state is read from and written to the URL by this project (see `search-url.js`). The dropin does not parse the URL.
 
-```
-| Metadata |
-| --- |
-| urlpath | gear/bags |
-```
+| Parameter | Description |
+|-----------|-------------|
+| `q`       | Search phrase (search page only). |
+| `page`    | Current page number (1-based). |
+| `sort`    | Sort spec: comma-separated `attribute_DIRECTION` (e.g. `price_ASC,name_DESC`). |
+| `filter`  | Filters: pipe-separated segments. Each segment is `attribute:value`; multiple values for the same attribute use multiple segments (e.g. `categories:val1\|categories:val2`). Supports `in` (single/multi-value) and numeric `range` (e.g. `price:0-100`). |
 
-## URL Parameters
-
-The block reads and updates the following URL parameters:
-
-- `q` - Search query phrase
-- `page` - Current page number (default: 1)
-- `sort` - Sort criteria (format: `attribute_direction`, e.g., `price_ASC`)
-- `filter` - Applied filters (format: `attribute:value|attribute:value`)
-
-### Filter Format
-
-**Single value:**
-```
-filter=color:blue
-```
-
-**Multiple values (in):**
-```
-filter=color:blue,red
-```
-
-**Range values:**
-```
-filter=price:10-50
-```
-
-**Multiple filters:**
-```
-filter=color:blue|price:10-50
-```
-
-## Behavior
-
-### Category Pages
-When `urlpath` is configured:
-- Displays all products in the specified category
-- Uses position-based sorting by default (DESC)
-- Filters by `categoryPath` and visibility
-
-### Search Pages
-When no `urlpath` is configured:
-- Uses the `q` URL parameter as the search phrase
-- Displays search results matching the query
-- Filters by visibility only
-
-### Pagination
-- Page size: 8 products per page
-- Scrolls to top of page on page change
-- Updates URL with current page number
-
-### Faceted Navigation
-- Mobile-responsive facets panel
-- Toggle button shows/hides facets on mobile
-- Filter count badge on toggle button
-- Filters update URL parameters
-
-### Product Actions
-- **Simple products:** Direct "Add to Cart" button
-- **Complex products:** Button links to product detail page
-- Wishlist toggle for all products
-- AEM Assets image integration
-
-## Integration Details
-
-### Dropins Used
-- `@dropins/storefront-product-discovery` - Search, facets, sorting, pagination
-- `@dropins/storefront-wishlist` - Wishlist toggle
-- `@dropins/storefront-cart` - Add to cart functionality
-
-### Required Initializers
-- `scripts/initializers/search.js`
-- `scripts/initializers/wishlist.js`
+On load, the block normalizes the URL (e.g. filter format) with `replaceState`. After each search result, it updates the URL with `pushState` so the address bar reflects the current request.
 
 ### Events
 
-**Subscribed:**
-- `search/result` (eager: true) - Updates result count and UI before render
-- `search/result` (eager: false) - Updates URL parameters after render
+#### Event Listeners
 
-**Event Payload Structure:**
-```javascript
-{
-  request: {
-    phrase: string,
-    currentPage: number,
-    sort: Array<{ attribute: string, direction: string }>,
-    filter: Array<{ attribute: string, in?: string[], range?: { from: number, to: number } }>
-  },
-  result: {
-    totalCount: number,
-    // ... other result data
-  }
-}
-```
+- `events.on('search/result', callback, { eager: true })` – Runs before the block re-renders. Updates empty-state class, result count text, and the facets button’s filter count.
+- `events.on('search/result', callback, { eager: false })` – Runs after the block is rendered. Writes the search request (phrase, page, sort, filter) to the URL and calls `history.pushState`.
 
-## User Interaction Flows
+The block does not emit events; it calls the dropin’s `search()` API and reacts to `search/result`.
 
-### Search Flow
-1. User enters search query in site search
-2. Page loads with `q` parameter
-3. Block executes search with phrase
-4. Results displayed with facets, sort, and pagination
-5. User interactions update URL and trigger new searches
+### Local Storage
 
-### Filter Flow
-1. User opens facets panel (mobile) or views facets (desktop)
-2. User selects filter option(s)
-3. Search executes with new filters
-4. Results update
-5. URL updated with filter parameters
-6. Filter count badge shows number of active filters
+This block does not use localStorage.
 
-### Add to Cart Flow
-1. User clicks "Add to Cart" on simple product
-2. Product added to cart via API
-3. For complex products, user redirected to PDP
+## Behavior Patterns
 
-## Error Handling
+### Page Modes
 
-### Search Errors
-- Logs error to console: "Error searching for products"
-- Does not block UI rendering
-- Empty state displayed if no results
+- **Category page** (`config.urlpath` set): Initial search uses an empty phrase, `categoryPath` filter, visibility filter, and any sort/filter from the URL. Products are scoped to the category.
+- **Search page** (no `urlpath`): Initial search uses `q` as the phrase, visibility filter, and sort/filter from the URL.
 
-### Empty State
-- Block receives class `product-list-page--empty` when `totalCount === 0`
-- Result info shows "0 results found" message
+A visibility filter `{ attribute: 'visibility', in: ['Search', 'Catalog, Search'] }` is always added to the request; it is not persisted in the URL but is included when syncing the URL after each result.
 
-## Customization Points
+### User Interaction Flows
 
-### Slots
+1. **Initial load**: Block reads URL via `getSearchStateFromUrl`, normalizes the URL, then calls `search()` with phrase, page, sort, and filter (including visibility and, on category pages, categoryPath).
+2. **Sort change**: User changes sort via SortBy; dropin calls `search()` with updated sort; block receives `search/result` and updates the URL.
+3. **Filter change**: User toggles facets; dropin calls `search()` with updated filter; block updates result count and URL.
+4. **Pagination**: User changes page; dropin calls `search()` with new page; block scrolls to top and URL is updated.
+5. **Add to cart / wishlist**: Product cards include add-to-cart and wishlist actions; cart and wishlist behavior are handled by their respective dropins. For simple products, the add-to-cart button is disabled when `product.inStock` is falsy. Complex products always link to the PDP where stock is validated by the PDP drop-in.
 
-**ProductImage:**
-- Renders AEM Assets images if available
-- Falls back to Commerce product images
-- Wrapped in link to product detail page
+### Error Handling
 
-**ProductActions:**
-- Container for add-to-cart and wishlist buttons
-- Can be customized via slot replacement
-
-### Styling Hooks
-- `.search__wrapper` - Main container
-- `.search__result-info` - Result count message
-- `.search__view-facets` - Mobile facets toggle
-- `.search__facets` - Facets panel
-- `.search__facets--visible` - Visible facets state
-- `.search__product-sort` - Sort dropdown
-- `.search__product-list` - Product grid
-- `.search__pagination` - Pagination controls
-- `.product-list-page--empty` - Empty state
-- `.product-discovery-product-actions` - Product action buttons container
-- `.product-discovery-product-actions__add-to-cart` - Add to cart button
-- `.product-discovery-product-actions__wishlist-toggle` - Wishlist button
-
-## Technical Notes
-
-- Uses `readBlockConfig()` for metadata parsing
-- Integrates with Commerce placeholder system for labels
-- Supports both category and search page types
-- URL state management via History API
-- Visibility filter ensures only searchable products shown
+- **Search API errors**: Initial `search()` calls are wrapped in `.catch()`; errors are logged with `console.error('Error searching for products', e)`. The block does not show an inline error UI; the dropin may show its own state.
+- **Missing payload**: Result count and filter-count updates guard with `payload.result?.totalCount`, `payload.request?.phrase`, and `payload.request.filter.length` where appropriate.
