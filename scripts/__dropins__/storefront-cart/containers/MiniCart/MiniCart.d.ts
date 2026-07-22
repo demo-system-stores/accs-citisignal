@@ -19,6 +19,9 @@ export interface MiniCartProps extends HTMLAttributes<HTMLDivElement> {
         Heading?: SlotProps;
         EmptyCart?: SlotProps;
         Footer?: SlotProps;
+        RowTotalFooter?: SlotProps<{
+            item: CartModel['items'][number];
+        }>;
         ProductAttributes?: SlotProps;
         CartSummaryFooter?: SlotProps;
         CartItem?: SlotProps;
@@ -29,6 +32,12 @@ export interface MiniCartProps extends HTMLAttributes<HTMLDivElement> {
             onUndo: () => void;
             onDismiss: () => void;
         }>;
+        ConfirmDeleteBanner?: SlotProps<{
+            item: CartModel['items'][0];
+            loading: boolean;
+            onConfirm: () => void;
+            onCancel: () => void;
+        }>;
         ItemTitle?: SlotProps<{
             item: CartModel['items'][number];
         }>;
@@ -37,7 +46,9 @@ export interface MiniCartProps extends HTMLAttributes<HTMLDivElement> {
         }>;
         ItemQuantity?: SlotProps<{
             item: CartModel['items'][number];
-            enableUpdateItemQuantity: boolean;
+            enableUpdateItemQuantity: boolean | {
+                removeOnZero?: boolean;
+            };
             handleItemQuantityUpdate: (item: CartModel['items'][number], quantity: number) => void;
             itemsLoading: Set<string>;
             handleItemsError: (uid: string, message?: string) => void;
@@ -69,9 +80,12 @@ export interface MiniCartProps extends HTMLAttributes<HTMLDivElement> {
     showDiscount?: boolean;
     showSavings?: boolean;
     enableItemRemoval?: boolean;
-    enableQuantityUpdate?: boolean;
+    enableQuantityUpdate?: boolean | {
+        removeOnZero?: boolean;
+    };
     hideHeading?: boolean;
     undo?: boolean;
+    confirmBeforeDelete?: boolean;
 }
 export declare const MiniCart: Container<MiniCartProps, CartModel | null>;
 //# sourceMappingURL=MiniCart.d.ts.map
