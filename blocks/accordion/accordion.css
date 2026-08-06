@@ -62,3 +62,79 @@
     border-top: 1px solid #dadada;
     background-color: var(--background-color);
 }
+
+/* ==========================================================================
+   LG OLED — FAQ (section class: .lg-oled-faq)
+   LG FAQ: no borders/chevron; light question rows ("Q. …") with each answer
+   shown in a white rounded card carrying an "A." marker. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-oled-faq .accordion details,
+.section.lg-oled-faq .accordion details[open] {
+    border: none;
+    background: transparent;
+    margin: 0 0 20px;
+}
+
+.section.lg-oled-faq .accordion details + details {
+    margin-top: 0;
+}
+
+/* question row — "Q." marker + text, not clickable (always open) */
+.section.lg-oled-faq .accordion details summary,
+.section.lg-oled-faq .accordion details[open] summary,
+.section.lg-oled-faq .accordion details summary:hover {
+    position: relative;
+    background: transparent;
+    color: var(--lg-black);
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0 0 14px 40px;
+    cursor: default;
+}
+
+.section.lg-oled-faq .accordion details summary::before {
+    content: "Q.";
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 600;
+}
+
+/* remove the chevron to match the reference */
+.section.lg-oled-faq .accordion details summary::after {
+    display: none;
+}
+
+/* answer → white rounded card with an "A." marker */
+.section.lg-oled-faq .accordion details .accordion-item-body,
+.section.lg-oled-faq .accordion details[open] .accordion-item-body {
+    position: relative;
+    margin: 0;
+    padding: 20px 24px 20px 56px;
+    border-top: none;
+    border-radius: 12px;
+    background: var(--lg-bg);
+    color: var(--lg-ink);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.section.lg-oled-faq .accordion details .accordion-item-body::before {
+    content: "A.";
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    font-weight: 600;
+    color: var(--lg-ink);
+}
+
+.section.lg-oled-faq .accordion details .accordion-item-body p {
+    margin: 0 0 1em;
+}
+
+.section.lg-oled-faq .accordion details .accordion-item-body p:last-child {
+    margin-bottom: 0;
+}
+/* stylelint-enable no-descending-specificity */

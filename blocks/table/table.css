@@ -65,3 +65,67 @@
 .table.bordered table td {
   border: 1px solid #dadada;
 }
+
+/* stylelint-disable no-descending-specificity */
+
+/* ==========================================================================
+   LG PDP — Key Spec grid (.lg-pdp-specs)
+   Turn the table into a 2-column grid of stacked label/value pairs with
+   divider lines. Works whether or not the "no-header" variant is used
+   (thead/tbody use display:contents so every row is a grid item).
+   Styling only.
+   ========================================================================== */
+.section.lg-pdp-specs .table {
+  overflow: visible;
+  background: transparent;
+}
+
+.section.lg-pdp-specs .table table {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 64px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (min-width: 768px) {
+  .section.lg-pdp-specs .table table {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.section.lg-pdp-specs .table thead,
+.section.lg-pdp-specs .table tbody {
+  display: contents;
+}
+
+.section.lg-pdp-specs .table tr {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 0;
+  border: none;
+  border-bottom: 1px solid var(--lg-line);
+}
+
+.section.lg-pdp-specs .table th,
+.section.lg-pdp-specs .table td {
+  display: block;
+  padding: 0;
+  text-align: left;
+}
+
+.section.lg-pdp-specs .table tr > *:first-child {
+  color: var(--lg-gray);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.section.lg-pdp-specs .table tr > *:last-child {
+  color: var(--lg-black);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* stylelint-enable no-descending-specificity */

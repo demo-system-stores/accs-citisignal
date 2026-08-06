@@ -42,3 +42,231 @@
   aspect-ratio: initial;
   object-fit: cover;
 }
+
+/* ==========================================================================
+   LG OLED — category quick-filter tiles (section class: .lg-oled-categories)
+   Borderless line-icon tiles in one scrollable row, gray labels; only the
+   active tile gets a light rounded highlight. Styling only.
+   ========================================================================== */
+.section.lg-oled-categories .cards > ul {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--lg-line);
+}
+
+.section.lg-oled-categories .cards > ul::-webkit-scrollbar {
+  display: none;
+}
+
+/* each tile: no card box, no shadow, transparent */
+.section.lg-oled-categories .cards > ul > li {
+  flex: 0 0 auto;
+  width: 128px;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+  color: var(--lg-gray);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* icon area: transparent, small line-icon */
+.section.lg-oled-categories .cards .cards-card-image {
+  min-height: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.section.lg-oled-categories .cards > ul > li img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+.section.lg-oled-categories .cards .cards-card-body {
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* hover + active highlight (active = the "OLED" tile, 4th in the list) */
+.section.lg-oled-categories .cards > ul > li:hover {
+  color: var(--lg-black);
+  background: rgb(0 0 0 / 4%);
+}
+
+.section.lg-oled-categories .cards > ul > li:nth-child(4) {
+  background: var(--lg-bg);
+  color: var(--lg-black);
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+/* ==========================================================================
+   LG PDP — award cards (.lg-pdp-awards)
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-pdp-awards .cards > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-awards .cards > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.section.lg-pdp-awards .cards > ul > li {
+  background: var(--lg-bg);
+  color: var(--lg-gray);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.section.lg-pdp-awards .cards .cards-card-image {
+  min-height: 0;
+  margin: 0 0 24px;
+  justify-content: flex-start;
+}
+
+.section.lg-pdp-awards .cards > ul > li img {
+  height: 120px;
+  width: auto;
+}
+
+.section.lg-pdp-awards .cards .cards-card-body {
+  margin: 0;
+}
+
+.section.lg-pdp-awards .cards .cards-card-body strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--lg-black);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* footnote (default content below the cards block) */
+.section.lg-pdp-awards .default-content-wrapper p {
+  color: var(--lg-gray);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   LG PDP — support cards (.lg-pdp-support)
+   ========================================================================== */
+.section.lg-pdp-support .default-content-wrapper {
+  position: relative;
+}
+
+.section.lg-pdp-support .default-content-wrapper .button-wrapper {
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .section.lg-pdp-support .default-content-wrapper .button-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.section.lg-pdp-support .default-content-wrapper a.button,
+.section.lg-pdp-support .default-content-wrapper a.button:any-link {
+  background: transparent;
+  border: 1px solid var(--lg-black);
+  border-radius: 6px;
+  color: var(--lg-black);
+  text-transform: none;
+  font-weight: 600;
+  padding: 12px 28px;
+}
+
+.section.lg-pdp-support .cards > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .section.lg-pdp-support .cards > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-support .cards > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.section.lg-pdp-support .cards > ul > li {
+  position: relative;
+  min-height: 240px;
+  padding: 28px 28px 84px;
+  background: var(--lg-bg);
+  color: var(--lg-gray);
+  border-radius: 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.section.lg-pdp-support .cards .cards-card-image {
+  min-height: 0;
+  margin: 0 0 12px;
+  justify-content: flex-start;
+}
+
+.section.lg-pdp-support .cards > ul > li img {
+  height: 40px;
+  width: auto;
+}
+
+.section.lg-pdp-support .cards .cards-card-body {
+  margin: 0;
+}
+
+.section.lg-pdp-support .cards .cards-card-body strong {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--lg-black);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* circular arrow bottom-left, like the reference */
+.section.lg-pdp-support .cards > ul > li::after {
+  content: "→";
+  position: absolute;
+  left: 28px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--lg-line);
+  border-radius: 50%;
+  color: var(--lg-black);
+  font-size: 18px;
+}
+
+/* stylelint-enable no-descending-specificity */

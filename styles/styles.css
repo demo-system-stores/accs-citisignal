@@ -649,3 +649,187 @@ body.columns main > .section:empty {
 main[hidden] {
   display: none !important;
 }
+
+/* ==========================================================================
+   LG SEARCH PAGE — scoped restyle to match lg.com/uk/search
+   Targets Section Metadata classes only:
+   .lg-search-bar  .lg-search-tabs  .lg-search-results  .lg-search-recs
+   Per-block visuals live in each block's own CSS (search / columns /
+   product-list-page / product-recommendations). This file only holds the
+   shared LG design tokens and the page container. Styling only — no content
+   changes. Mobile-first.
+   ========================================================================== */
+
+:root {
+  --lg-red: #c4262e;
+  --lg-red-dark: #a41f26;
+  --lg-black: #000;
+  --lg-ink: #1a1a1a;
+  --lg-gray: #6b6b6b;
+  --lg-line: #cfcabf;
+  --lg-line-soft: #e5e0d6;
+  --lg-bg: #fff;
+  --lg-bg-alt: #f6f4f0;
+  --lg-beige: #ebe7e0;
+  --lg-pill: #f4f2ee;
+  --lg-max: 1440px;
+}
+
+/* Whole page background = LG "Life's Good" beige.
+   Scoped with :has() so it only applies to the LG-rebranded pages. */
+body:has(.section.lg-search-results),
+body:has(.section.lg-oled-plp) {
+  background-color: var(--lg-beige);
+}
+
+/* Shared page container: center each LG section and tighten vertical rhythm */
+.section.lg-search-bar,
+.section.lg-search-tabs,
+.section.lg-search-results,
+.section.lg-search-recs {
+  max-width: var(--lg-max);
+  margin-inline: auto;
+  margin-block: var(--spacing-medium) 0;
+  padding-inline: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--lg-ink);
+}
+
+@media (min-width: 900px) {
+  .section.lg-search-bar,
+  .section.lg-search-tabs,
+  .section.lg-search-results,
+  .section.lg-search-recs {
+    padding-inline: 24px;
+  }
+}
+
+/* ==========================================================================
+   LG OLED CATEGORY PAGE — shared container + editorial text
+   (per-block visuals live in cards / product-list-page /
+    product-recommendations / accordion CSS). Styling only. Mobile-first.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-oled-categories,
+.section.lg-oled-plp,
+.section.lg-oled-picks,
+.section.lg-oled-faq,
+.section.lg-oled-editorial {
+  max-width: var(--lg-max);
+  margin-inline: auto;
+  padding-inline: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--lg-ink);
+}
+
+@media (min-width: 900px) {
+  .section.lg-oled-categories,
+  .section.lg-oled-plp,
+  .section.lg-oled-picks,
+  .section.lg-oled-faq,
+  .section.lg-oled-editorial {
+    padding-inline: 24px;
+  }
+}
+
+/* section heading ("Our Picks for You") */
+.section.lg-oled-picks h2 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--lg-black);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--spacing-medium);
+}
+
+/* FAQ heading — large, bold, with a full-width divider beneath */
+.section.lg-oled-faq h1,
+.section.lg-oled-faq h2,
+.section.lg-oled-faq h3,
+.section.lg-oled-faq h4 {
+  font: 700 clamp(2.2rem, 5vw, 3.4rem) / 1.1 var(--type-base-font-family);
+  letter-spacing: -0.01em;
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-medium);
+  padding-bottom: var(--spacing-medium);
+  border-bottom: 1px solid var(--lg-line);
+}
+
+/* editorial SEO copy block */
+.section.lg-oled-editorial {
+  margin-block: var(--spacing-xxlarge);
+}
+
+.section.lg-oled-editorial h1 {
+  font: 700 clamp(2.6rem, 6vw, 4.6rem) / 1.05 var(--type-base-font-family);
+  letter-spacing: -0.02em;
+  color: var(--lg-black);
+  margin-bottom: var(--spacing-medium);
+}
+
+.section.lg-oled-editorial p {
+  max-width: 1100px;
+  color: var(--lg-ink);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+.section.lg-oled-editorial a {
+  color: var(--lg-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.section.lg-oled-editorial a:hover {
+  color: var(--lg-red);
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ==========================================================================
+   LG PDP PAGE — beige background, section containers, section headings
+   (per-block visuals live in product-details / columns / cards / table CSS).
+   Styling only. Mobile-first.
+   ========================================================================== */
+body:has(.section.lg-pdp-details) {
+  background-color: var(--lg-beige);
+}
+
+.section.lg-pdp-details,
+.section.lg-pdp-promo,
+.section.lg-pdp-awards,
+.section.lg-pdp-specs,
+.section.lg-pdp-support,
+.section.lg-pdp-wtb {
+  max-width: var(--lg-max);
+  margin-inline: auto;
+  padding-inline: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--lg-ink);
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-details,
+  .section.lg-pdp-promo,
+  .section.lg-pdp-awards,
+  .section.lg-pdp-specs,
+  .section.lg-pdp-support,
+  .section.lg-pdp-wtb {
+    padding-inline: 24px;
+  }
+}
+
+/* PDP section headings ("Discover our latest promotions", "Key Spec", …) */
+.section.lg-pdp-promo h2,
+.section.lg-pdp-specs h2,
+.section.lg-pdp-support h2,
+.section.lg-pdp-wtb h2 {
+  font: 700 clamp(2rem, 4vw, 3rem) / 1.1 var(--type-base-font-family);
+  letter-spacing: -0.01em;
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-medium);
+}

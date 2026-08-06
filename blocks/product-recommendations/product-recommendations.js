@@ -372,4 +372,68 @@ export default async function decorate(block) {
     });
     inViewObserver.observe(section);
   }
+
+  // LG "Our Picks for You" — carousel arrow controls + counter (OLED page only)
+  const lgSection = block.closest('.section');
+  if (lgSection && lgSection.classList.contains('lg-oled-picks')) {
+    const trackSelector = '.dropin-content-grid__content, .recommendations-product-list__content, .recommendations-carousel__content';
+
+    const controls = document.createElement('div');
+    controls.className = 'lg-carousel-controls';
+    const counter = document.createElement('span');
+    counter.className = 'lg-carousel-counter';
+    const prev = document.createElement('button');
+    prev.type = 'button';
+    prev.className = 'lg-carousel-arrow lg-carousel-arrow--prev';
+    prev.setAttribute('aria-label', 'Previous');
+    prev.textContent = '‹';
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'lg-carousel-arrow lg-carousel-arrow--next';
+    next.setAttribute('aria-label', 'Next');
+    next.textContent = '›';
+    controls.append(counter, prev, next);
+    lgSection.appendChild(controls);
+
+    const getTrack = () => lgSection.querySelector(trackSelector);
+
+    const pageWidth = (track) => {
+      const card = track.querySelector('.dropin-product-item-card');
+      const cardWidth = card ? card.getBoundingClientRect().width + 16 : track.clientWidth;
+      const perView = Math.max(1, Math.round(track.clientWidth / cardWidth));
+      return perView * cardWidth;
+    };
+
+    const update = () => {
+      const track = getTrack();
+      if (!track) return;
+      const width = pageWidth(track);
+      const pages = Math.max(1, Math.ceil(track.scrollWidth / width));
+      const current = Math.min(pages, Math.floor((track.scrollLeft + 2) / width) + 1);
+      counter.textContent = `${current}/${pages}`;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+      controls.style.display = track.scrollWidth > track.clientWidth + 2 ? 'flex' : 'none';
+    };
+
+    prev.addEventListener('click', () => {
+      const track = getTrack();
+      if (track) track.scrollBy({ left: -pageWidth(track), behavior: 'smooth' });
+    });
+    next.addEventListener('click', () => {
+      const track = getTrack();
+      if (track) track.scrollBy({ left: pageWidth(track), behavior: 'smooth' });
+    });
+
+    const carouselObserver = new MutationObserver(() => {
+      const track = getTrack();
+      if (track && !track.dataset.lgWired) {
+        track.dataset.lgWired = '1';
+        track.addEventListener('scroll', () => window.requestAnimationFrame(update));
+      }
+      update();
+    });
+    carouselObserver.observe(block, { childList: true, subtree: true });
+    window.addEventListener('resize', update);
+  }
 }
