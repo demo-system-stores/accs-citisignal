@@ -70,3 +70,285 @@
   border: none;
   text-transform: uppercase;
 }
+
+
+/* ==========================================================================
+   LG SEARCH — tab bar (section class: .lg-search-tabs)
+   Resets the default purple columns styling; centered LG tabs with a RED
+   underline on the active (bold) tab. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-search-tabs {
+  margin-block: 0 var(--spacing-medium);
+}
+
+.section.lg-search-tabs .columns > div {
+  flex-direction: row;
+  justify-content: center;
+  gap: clamp(24px, 8vw, 120px);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--lg-ink);
+  border-radius: 0;
+  border-bottom: 1px solid var(--lg-line);
+}
+
+.section.lg-search-tabs .columns > div > div {
+  flex: 0 0 auto;
+  order: unset;
+  position: relative;
+  padding: 18px 8px;
+  text-align: center;
+  color: var(--lg-gray);
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.section.lg-search-tabs .columns > div > div:hover {
+  color: var(--lg-black);
+}
+
+.section.lg-search-tabs .columns p {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: 1.2;
+}
+
+/* active tab = the cell containing bold text */
+.section.lg-search-tabs .columns > div > div:has(strong) {
+  color: var(--lg-black);
+}
+
+.section.lg-search-tabs .columns > div > div:has(strong) strong {
+  font-weight: 700;
+}
+
+.section.lg-search-tabs .columns > div > div:has(strong)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--lg-red);
+}
+/* stylelint-enable no-descending-specificity */
+
+
+/* ==========================================================================
+   LG PDP — sticky scroll-spy tab bar (.lg-pdp-tabs)
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-pdp-tabs {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 4;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: var(--lg-beige);
+}
+
+.section.lg-pdp-tabs .columns > div {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: clamp(16px, 3vw, 40px);
+  max-width: var(--lg-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid var(--lg-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.section.lg-pdp-tabs .columns > div::-webkit-scrollbar {
+  display: none;
+}
+
+.section.lg-pdp-tabs .columns > div > div {
+  flex: 0 0 auto;
+  order: unset;
+  position: relative;
+  padding: 16px 2px;
+}
+
+.section.lg-pdp-tabs .columns p {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.section.lg-pdp-tabs .columns a,
+.section.lg-pdp-tabs .columns a:hover {
+  color: var(--lg-gray);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.section.lg-pdp-tabs .columns > div > div.active a,
+.section.lg-pdp-tabs .columns a:hover {
+  color: var(--lg-black);
+}
+
+.section.lg-pdp-tabs .columns > div > div.active::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--lg-red);
+}
+
+/* ==========================================================================
+   LG PDP — promotions banner (.lg-pdp-promo)
+   ========================================================================== */
+
+/* section heading ("Discover our latest promotions") is authored as an h3,
+   not the h2 the shared styles.css PDP heading rule targets */
+.section.lg-pdp-promo .default-content-wrapper h3 {
+  font: 700 clamp(1.75rem, 3vw, 2.5rem) / 1.15 var(--type-base-font-family);
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-medium);
+  padding: 0;
+}
+
+.section.lg-pdp-promo .columns > div {
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  margin: 0;
+  padding: var(--spacing-medium);
+  background: var(--lg-bg);
+  color: var(--lg-ink);
+  border-radius: 16px;
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-promo .columns > div {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-big);
+    gap: var(--spacing-big);
+  }
+
+  .section.lg-pdp-promo .columns > div > div:first-child {
+    flex: 1 1 55%;
+    order: unset;
+  }
+
+  .section.lg-pdp-promo .columns > div > div:last-child {
+    flex: 0 0 auto;
+    width: min(380px, 40%);
+    order: unset;
+  }
+}
+
+.section.lg-pdp-promo .columns h2 {
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--lg-black);
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+.section.lg-pdp-promo .columns h3 {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-small);
+  padding: 0;
+}
+
+.section.lg-pdp-promo .columns p {
+  color: var(--lg-gray);
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+/* style the CTA link directly — decorateButtons() only adds .button when the
+   link is wrapped in <strong>/<em> in the doc, which this content doesn't do */
+.section.lg-pdp-promo .columns a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--spacing-small);
+  padding: 10px 28px;
+  background: var(--lg-red);
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.section.lg-pdp-promo .columns a:hover {
+  background: var(--lg-red-dark);
+}
+
+.section.lg-pdp-promo .columns img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   LG PDP — "Where to Buy" gradient banner (.lg-pdp-wtb)
+   ========================================================================== */
+.section.lg-pdp-wtb .columns > div {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0;
+  padding: clamp(32px, 5vw, 56px);
+  background: linear-gradient(100deg, #e4574c 0%, #d81f5f 100%);
+  color: #fff;
+  border-radius: 20px;
+}
+
+.section.lg-pdp-wtb .columns h2 {
+  color: #fff;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  margin: 0;
+}
+
+.section.lg-pdp-wtb .columns p {
+  margin: 0;
+  padding: 0;
+}
+
+.section.lg-pdp-wtb .columns a,
+.section.lg-pdp-wtb .columns a:hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-top: 16px;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+}
+
+.section.lg-pdp-wtb .columns img {
+  width: clamp(90px, 12vw, 150px);
+  height: auto;
+}
+/* stylelint-enable no-descending-specificity */

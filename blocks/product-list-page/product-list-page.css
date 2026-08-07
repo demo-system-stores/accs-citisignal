@@ -147,3 +147,358 @@
         justify-content: flex-end;
     }
 }
+
+/* ==========================================================================
+   LG SEARCH — results (section class: .lg-search-results)
+   Beige page, single-column list of horizontal white cards, red CTAs — to
+   match lg.com/uk/search. Styling only.
+   ========================================================================== */
+
+/* result count line */
+.section.lg-search-results .block.product-list-page .search__result-info {
+    font-size: 15px;
+    color: var(--lg-ink);
+}
+
+.section.lg-search-results .block.product-list-page .search__result-info strong {
+    color: var(--lg-black);
+    font-weight: 700;
+}
+
+/* sort dropdown → bordered white LG pill */
+.section.lg-search-results .block.product-list-page .dropin-picker__select {
+    border: 1px solid var(--lg-line);
+    border-radius: 999px;
+    padding-block: 10px;
+    color: var(--lg-ink);
+    background: var(--lg-bg);
+}
+
+/* facet rail */
+.section.lg-search-results .block.product-list-page .search__facets {
+    border-right: none;
+}
+
+.section.lg-search-results .block.product-list-page .product-discovery-facet__header {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--lg-black);
+}
+
+.section.lg-search-results .block.product-list-page .product-discovery-facet {
+    border-bottom: 1px solid var(--lg-line-soft);
+    padding-block: var(--spacing-xsmall);
+}
+
+/* single-column list of results */
+.section.lg-search-results .block.product-list-page .product-discovery-product-list__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* horizontal white card: image left, details right */
+.section.lg-search-results .block.product-list-page .dropin-product-item-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 28px;
+    background: var(--lg-bg);
+    border-radius: 12px;
+    padding: 20px 28px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image-container,
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+    flex: 0 0 180px;
+    width: 180px;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+    border: none;
+    border-radius: 8px;
+    background: var(--lg-bg-alt);
+    padding: var(--spacing-xsmall);
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__content {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__title {
+    color: var(--lg-ink);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__title a {
+    color: inherit;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__sku {
+    color: var(--lg-gray);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__price,
+.section.lg-search-results .block.product-list-page .dropin-price--bold {
+    color: var(--lg-black);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__action {
+    margin-top: 10px;
+}
+
+/* CTAs → LG red primary, black-outline secondary */
+.section.lg-search-results .block.product-list-page a.button.primary,
+.section.lg-search-results .block.product-list-page button.button.primary,
+.section.lg-search-results .block.product-list-page .dropin-button--primary {
+    background: var(--lg-red);
+    border-color: var(--lg-red);
+    color: #fff;
+    border-radius: 999px;
+}
+
+.section.lg-search-results .block.product-list-page a.button.primary:hover,
+.section.lg-search-results .block.product-list-page button.button.primary:hover,
+.section.lg-search-results .block.product-list-page .dropin-button--primary:hover {
+    background: var(--lg-red-dark);
+    border-color: var(--lg-red-dark);
+}
+
+.section.lg-search-results .block.product-list-page a.button.secondary,
+.section.lg-search-results .block.product-list-page button.button.secondary {
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+    border-radius: 999px;
+}
+
+/* pagination: active page red */
+.section.lg-search-results .block.product-list-page .dropin-pagination_list-item--active {
+    color: var(--lg-red);
+    border-color: var(--lg-red);
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card {
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card__image-container,
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+        flex-basis: 120px;
+        width: 120px;
+    }
+}
+
+/* ==========================================================================
+   LG OLED — category product grid (section class: .lg-oled-plp)
+   Grid of vertical white cards on the beige page, red CTAs. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+/* section itself carries the beige explicitly, so the gaps between cards
+   (created via card margin, not grid gap) show beige instead of whatever
+   background the page happens to have if the body:has() rule doesn't match */
+.section.lg-oled-plp {
+    background: var(--lg-beige);
+}
+
+.section.lg-oled-plp .block.product-list-page .search__result-info {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--lg-black);
+}
+
+.section.lg-oled-plp .block.product-list-page .search__result-info strong {
+    color: var(--lg-black);
+    font-weight: 700;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-picker__select {
+    border: 1px solid var(--lg-line);
+    border-radius: 999px;
+    padding-block: 10px;
+    color: var(--lg-ink);
+    background: var(--lg-bg);
+}
+
+.section.lg-oled-plp .block.product-list-page .product-discovery-facet__header {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--lg-black);
+    margin-bottom: var(--spacing-xsmall);
+}
+
+.section.lg-oled-plp .block.product-list-page .product-discovery-facet {
+    border-bottom: 1px solid var(--lg-line-soft);
+    padding-block: var(--spacing-small);
+}
+
+/* grid: 2 → 3 columns
+   gap intentionally omitted — spacing comes from the card's own margin
+   below, since gap has no effect if cards aren't direct grid children */
+.section.lg-oled-plp .block.product-list-page .product-discovery-product-list__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 900px) {
+    .section.lg-oled-plp .block.product-list-page .product-discovery-product-list__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* vertical white card
+   margin (not just the grid's gap) creates the spacing: the dropin may wrap
+   cards in an intermediate list node rather than making them direct children
+   of .product-discovery-product-list__grid, in which case grid `gap` has
+   nothing to apply between and produces no visible space at all. */
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card {
+    display: flex;
+    flex-direction: column;
+    margin: 12px;
+    border-radius: 16px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card__image {
+    border: none;
+    border-radius: 8px;
+    background: var(--lg-bg-alt);
+    padding: var(--spacing-medium);
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card__title {
+    color: var(--lg-ink);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 16px;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card__title a {
+    color: inherit;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card__sku {
+    color: var(--lg-gray);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card__price,
+.section.lg-oled-plp .block.product-list-page .dropin-price--bold {
+    color: var(--lg-black);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.primary,
+.section.lg-oled-plp .block.product-list-page button.button.primary,
+.section.lg-oled-plp .block.product-list-page .dropin-button--primary {
+    background: var(--lg-red);
+    border-color: var(--lg-red);
+    color: #fff;
+    border-radius: 999px;
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.primary:hover,
+.section.lg-oled-plp .block.product-list-page button.button.primary:hover,
+.section.lg-oled-plp .block.product-list-page .dropin-button--primary:hover {
+    background: var(--lg-red-dark);
+    border-color: var(--lg-red-dark);
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.secondary,
+.section.lg-oled-plp .block.product-list-page button.button.secondary {
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+    border-radius: 999px;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-pagination_list-item--active {
+    color: var(--lg-red);
+    border-color: var(--lg-red);
+    font-weight: 700;
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ==========================================================================
+   LG — "Sort by" dropdown (search + OLED pages)
+   Un-float the label and place it to the LEFT of a bordered value box with a
+   chevron on the right, matching lg.com. Higher specificity (includes
+   .search__product-sort) so it wins over the section rules above. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-field,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-field,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+/* label → static, to the left, gray (both the field label and the floating one) */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-field__label,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker > label,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-field__label,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker > label {
+    position: static;
+    inset: auto;
+    transform: none;
+    order: -1;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--lg-gray);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* the value box */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__select,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__select {
+    appearance: none;
+    min-width: 190px;
+    padding: 12px 44px 12px 16px;
+    border: 1px solid var(--lg-line);
+    border-radius: 8px;
+    background: var(--lg-bg);
+    color: var(--lg-ink);
+    font-size: 15px;
+}
+
+/* chevron inside the box, on the right */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__chevron,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__chevronDown,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__chevron,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__chevronDown {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+/* stylelint-enable no-descending-specificity */

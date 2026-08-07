@@ -193,6 +193,17 @@ export default async function decorate(block) {
     brandLink.closest('.button-container').className = '';
   }
 
+  // LG logo isn't authored as a link — wrap it so it navigates home on click
+  const navLogoPicture = navBrand.querySelector('picture');
+  if (navLogoPicture && !navLogoPicture.closest('a')) {
+    const logoWrapper = navLogoPicture.parentElement;
+    const logoLink = document.createElement('a');
+    logoLink.href = '/';
+    logoLink.setAttribute('aria-label', 'LG Home');
+    logoLink.append(navLogoPicture);
+    logoWrapper.append(logoLink);
+  }
+
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
     navSections
