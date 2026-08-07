@@ -201,19 +201,28 @@
     display: none;
 }
 
-/* each card → fixed-width white LG card (higher specificity than the block's
-   own .product-recommendations-wrapper .dropin-content-grid__content ... rule) */
-.section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card,
-.section.lg-oled-picks .recommendations-product-item-card,
-.section.lg-oled-picks .dropin-product-item-card {
-    /* exactly 4 visible per "row" of the scroll carousel (gap is 16px, 3 gaps
-       between 4 cards), never narrower than 240px on small viewports.
-       Longhand + min-width (not flex:0 0 max(...)) so nothing here risks
-       being an invalid shorthand value that gets silently dropped. */
+/* The actual flex item is the <span role="group"> the dropin wraps each card
+   in — NOT .dropin-product-item-card (that's one level deeper and inert for
+   sizing purposes). Confirmed via live DOM inspection: the legacy rule above
+   (".product-recommendations-wrapper .dropin-content-grid__content span")
+   was the thing actually controlling width all along (flex-basis:0;flex-grow:1
+   → equal-share fill), which is why every previous attempt to size the card
+   itself had zero visible effect. Override that span here instead. */
+.section.lg-oled-picks .recommendations-carousel__content > span,
+.section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content span[role="group"] {
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: calc((100% - 48px) / 4);
     min-width: 240px;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+}
+
+/* card fills its span wrapper; cosmetic styling only */
+.section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card,
+.section.lg-oled-picks .recommendations-product-item-card,
+.section.lg-oled-picks .dropin-product-item-card {
+    width: 100%;
     scroll-snap-align: start;
     box-sizing: border-box;
     background: var(--lg-bg);

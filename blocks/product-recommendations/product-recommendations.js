@@ -376,7 +376,15 @@ export default async function decorate(block) {
   // LG "Our Picks for You" — carousel arrow controls + counter (OLED page only)
   const lgSection = block.closest('.section');
   if (lgSection && lgSection.classList.contains('lg-oled-picks')) {
-    const trackSelector = '.dropin-content-grid__content, .recommendations-product-list__content, .recommendations-carousel__content';
+    // Order matters: these classes are nested inside one another in the real
+    // DOM (outer → inner). querySelector on a comma list returns the first
+    // match in *document order*, which was always the outermost non-scrolling
+    // wrapper. Try candidates and prefer whichever one actually overflows.
+    const trackSelectors = [
+      '.recommendations-carousel__content',
+      '.recommendations-product-list__content',
+      '.dropin-content-grid__content',
+    ];
 
     const controls = document.createElement('div');
     controls.className = 'lg-carousel-controls';
@@ -395,7 +403,12 @@ export default async function decorate(block) {
     controls.append(counter, prev, next);
     lgSection.appendChild(controls);
 
-    const getTrack = () => lgSection.querySelector(trackSelector);
+    const getTrack = () => {
+      const candidates = trackSelectors
+        .map((sel) => lgSection.querySelector(sel))
+        .filter(Boolean);
+      return candidates.find((el) => el.scrollWidth > el.clientWidth + 2) || candidates[0] || null;
+    };
 
     const cardStep = (track) => {
       const card = track.querySelector('.dropin-product-item-card');
@@ -441,5 +454,15 @@ export default async function decorate(block) {
     });
     carouselObserver.observe(block, { childList: true, subtree: true });
     window.addEventListener('resize', update);
+
+    // update() above only runs reactively off DOM mutations — if the track
+    // is already fully populated by the time the observer attaches (or
+    // settles before overflow is measurable), it never fires and the
+    // controls are stuck at their last (possibly stale/hidden) state.
+    // Force a few eager re-checks so the initial visibility is correct.
+    update();
+    window.requestAnimationFrame(update);
+    setTimeout(update, 500);
+    setTimeout(update, 1500);
   }
 }
