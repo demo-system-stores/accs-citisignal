@@ -135,3 +135,89 @@
   width: 24px;
   border-radius: 50%;
 }
+
+/* ==========================================================================
+   LG SEARCH — body search bar (section class: .lg-search-bar)
+   Rounded pill input with the magnifier on the left + a red "Search" button,
+   matching lg.com/uk/search. Styling only.
+   ========================================================================== */
+.section.lg-search-bar {
+  /* header is position:fixed, so clear its height (--nav-height) + a gap */
+  margin-block: calc(var(--nav-height) + var(--spacing-xxlarge)) var(--spacing-medium) !important;
+}
+
+.section.lg-search-bar .search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+/* the pill */
+.section.lg-search-bar .search .search-box {
+  flex: 1;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--lg-pill);
+  border: 1px solid var(--lg-line);
+  border-radius: 999px;
+}
+
+.section.lg-search-bar .search .search-box .icon-search {
+  order: 0;
+  width: 22px;
+  height: 22px;
+}
+
+.section.lg-search-bar .search .search-box .icon-search img {
+  width: 22px;
+  height: 22px;
+}
+
+.section.lg-search-bar .search .search-box input,
+.section.lg-search-bar .search .search-box input:hover {
+  order: 1;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--lg-black);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.section.lg-search-bar .search .search-box input::placeholder {
+  color: var(--lg-gray);
+}
+
+.section.lg-search-bar .search .search-box input:focus {
+  outline: none;
+}
+
+/* decorative red "Search" button (typing already searches live) */
+.section.lg-search-bar .search::after {
+  content: "Search";
+  flex: 0 0 auto;
+  padding: 16px 40px;
+  background: var(--lg-red);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* LG's body bar shows no inline content-results dropdown */
+.section.lg-search-bar .search .search-results {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .section.lg-search-bar .search::after {
+    padding: 14px 24px;
+  }
+}

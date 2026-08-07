@@ -6,18 +6,34 @@ footer {
 }
 
 footer .footer > div {
-    margin: auto;
-    max-width: 1200px;
-    padding: 40px 24px 24px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+}
 
+/* share the same row as the social icons (.section.footer-utility) */
+footer .footer > div > .storeview-switcher-button {
+    order: 2;
+    flex: 1 0 100%;
+    display: flex;
+    align-items: center;
+    background: #e6e1d6;
+    border-top: 1px solid var(--lg-line);
+    padding-inline: var(--spacing-medium);
+    padding-block: var(--spacing-small);
+}
+
+@media (min-width: 900px) {
+    footer .footer > div > .storeview-switcher-button {
+        flex: 0 0 auto;
+        padding-inline: var(--spacing-xbig);
+    }
 }
 
 footer .footer div.storeview-switcher-button button.storeview-switcher-button {
-    color: var(--background-color);
+    color: var(--lg-black);
 }
 
 footer .footer p {
@@ -88,8 +104,313 @@ footer .footer a:hover {
     margin-bottom: var(--spacing-small);
 }
 
+/* ==========================================================================
+   LG FOOTER — matches lg.com/uk footer design
+   Section Metadata classes: footer-links, footer-utility, footer-legal
+   Content per section: see /footer authoring doc.
+   Mobile-first; breakpoints at 600/900/1200 per project convention.
+   ========================================================================== */
+
+.section.footer-links,
+.section.footer-legal {
+    width: 100%;
+    flex: 1 0 100%;
+}
+
+.section.footer-links {
+    order: 1;
+}
+
+.section.footer-utility {
+    order: 2;
+    flex: 1 0 100%;
+}
+
 @media (min-width: 900px) {
-    footer .footer > div {
-        padding: 40px 32px 24px;
+    .section.footer-utility {
+        flex: 1 1 auto;
     }
+}
+
+.section.footer-legal {
+    order: 3;
+}
+
+.section.footer-links > div,
+.section.footer-utility > div,
+.section.footer-legal > div {
+    box-sizing: border-box;
+    max-width: var(--lg-max);
+    margin-inline: auto;
+    padding-inline: var(--spacing-medium);
+}
+
+@media (min-width: 900px) {
+    .section.footer-links > div,
+    .section.footer-utility > div,
+    .section.footer-legal > div {
+        padding-inline: var(--spacing-xbig);
+    }
+}
+
+/* ---------- Section 1: nav link columns ---------- */
+.section.footer-links {
+    background: #e6e1d6;
+    color: var(--lg-black);
+}
+
+.section.footer-links > div {
+    padding-block: var(--spacing-xbig) var(--spacing-medium);
+}
+
+.section.footer-links .columns > div {
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+    color: inherit;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+}
+
+@media (min-width: 900px) {
+    .section.footer-links .columns > div {
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: var(--spacing-medium) var(--spacing-big);
+    }
+
+    .section.footer-links .columns > div > div {
+        flex: 1 1 28%;
+        order: unset;
+    }
+}
+
+@media (min-width: 1200px) {
+    .section.footer-links .columns > div {
+        flex-wrap: nowrap;
+        gap: var(--spacing-medium);
+    }
+
+    .section.footer-links .columns > div > div {
+        flex: 1 1 0;
+    }
+}
+
+.section.footer-links .columns h3 {
+    font-size: 17px;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--lg-black);
+    margin: 0 0 var(--spacing-small);
+    padding: 0;
+}
+
+.section.footer-links .columns h3:not(:first-child) {
+    margin-top: var(--spacing-big);
+}
+
+.section.footer-links .columns ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section.footer-links .columns li {
+    margin-bottom: var(--spacing-xsmall);
+}
+
+.section.footer-links .columns a,
+.section.footer-links .columns a:hover {
+    color: var(--lg-gray);
+    font-size: 15px;
+    line-height: 1.4;
+    padding: 0;
+    text-decoration: none;
+}
+
+.section.footer-links .columns a:hover {
+    color: var(--lg-black);
+    text-decoration: underline;
+}
+
+/* ---------- Section 2: social icon row ---------- */
+.section.footer-utility {
+    background: #e6e1d6;
+    border-top: 1px solid var(--lg-line);
+}
+
+/* fallback divider for when the store switcher button isn't rendered */
+footer .footer > div:not(:has(.storeview-switcher-button)) .section.footer-utility {
+    border-top: 1px solid var(--lg-line);
+}
+
+.section.footer-utility > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-small);
+    padding-block: var(--spacing-medium);
+}
+
+@media (min-width: 900px) {
+    .section.footer-utility > div {
+        justify-content: flex-end;
+    }
+}
+
+.section.footer-utility ul {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section.footer-utility li .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--lg-black);
+}
+
+.section.footer-utility .icon img {
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
+}
+
+/* ---------- Section 3: legal links, cards, copyright ---------- */
+.section.footer-legal {
+    background: var(--lg-ink);
+    color: var(--color-neutral-500);
+}
+
+.section.footer-legal > div {
+    padding-block: var(--spacing-big) var(--spacing-medium);
+}
+
+.section.footer-legal .columns > div {
+    margin: 0;
+    background: transparent;
+    border-radius: 0;
+    color: inherit;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+}
+
+@media (min-width: 900px) {
+    .section.footer-legal .columns > div {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--spacing-big);
+    }
+
+    .section.footer-legal .columns > div > div {
+        flex: unset;
+        order: unset;
+    }
+}
+
+/* legal links list */
+.section.footer-legal .columns > div > div:first-child ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0 var(--spacing-xsmall);
+}
+
+.section.footer-legal .columns > div > div:first-child li {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.section.footer-legal .columns > div > div:first-child li:not(:last-child)::after {
+    content: "|";
+    margin-left: var(--spacing-xsmall);
+    color: var(--color-neutral-700);
+}
+
+.section.footer-legal .columns > div > div:first-child a,
+.section.footer-legal .columns > div > div:first-child a:hover {
+    color: var(--color-neutral-500);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 0;
+}
+
+.section.footer-legal .columns > div > div:first-child a:hover {
+    color: var(--color-neutral-50);
+    text-decoration: underline;
+}
+
+/* cards: slavery act statement + ethics hotline */
+.section.footer-legal .columns > div > div:last-child ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--spacing-small);
+}
+
+@media (min-width: 600px) {
+    .section.footer-legal .columns > div > div:last-child ul {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+}
+
+.section.footer-legal .columns > div > div:last-child li {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: var(--spacing-xsmall);
+    background: var(--color-neutral-50);
+    border-radius: var(--shape-border-radius-2);
+    padding: var(--spacing-small) var(--spacing-medium);
+    white-space: nowrap;
+}
+
+.section.footer-legal .columns > div > div:last-child .icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.section.footer-legal .columns > div > div:last-child a,
+.section.footer-legal .columns > div > div:last-child a:hover {
+    color: var(--lg-black);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* copyright */
+.section.footer-legal .default-content-wrapper {
+    margin-top: var(--spacing-big);
+    padding-top: var(--spacing-medium);
+    border-top: 1px solid var(--color-brand-700);
+}
+
+.section.footer-legal .default-content-wrapper p {
+    margin: 0 0 var(--spacing-xsmall);
+    color: var(--color-neutral-600);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.section.footer-legal .default-content-wrapper a,
+.section.footer-legal .default-content-wrapper a:hover {
+    color: var(--color-neutral-600);
+    font-size: 12px;
+    text-decoration: underline;
+    padding: 0;
 }
