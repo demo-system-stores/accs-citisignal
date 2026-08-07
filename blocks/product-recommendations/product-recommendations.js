@@ -397,9 +397,15 @@ export default async function decorate(block) {
 
     const getTrack = () => lgSection.querySelector(trackSelector);
 
-    const pageWidth = (track) => {
+    const cardStep = (track) => {
       const card = track.querySelector('.dropin-product-item-card');
-      const cardWidth = card ? card.getBoundingClientRect().width + 16 : track.clientWidth;
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    const pageWidth = (track) => {
+      const cardWidth = cardStep(track);
       const perView = Math.max(1, Math.round(track.clientWidth / cardWidth));
       return perView * cardWidth;
     };
@@ -418,11 +424,11 @@ export default async function decorate(block) {
 
     prev.addEventListener('click', () => {
       const track = getTrack();
-      if (track) track.scrollBy({ left: -pageWidth(track), behavior: 'smooth' });
+      if (track) track.scrollBy({ left: -cardStep(track), behavior: 'smooth' });
     });
     next.addEventListener('click', () => {
       const track = getTrack();
-      if (track) track.scrollBy({ left: pageWidth(track), behavior: 'smooth' });
+      if (track) track.scrollBy({ left: cardStep(track), behavior: 'smooth' });
     });
 
     const carouselObserver = new MutationObserver(() => {

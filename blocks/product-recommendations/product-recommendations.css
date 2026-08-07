@@ -206,7 +206,14 @@
 .section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card,
 .section.lg-oled-picks .recommendations-product-item-card,
 .section.lg-oled-picks .dropin-product-item-card {
-    flex: 0 0 clamp(240px, 22vw, 300px);
+    /* exactly 4 visible per "row" of the scroll carousel (gap is 16px, 3 gaps
+       between 4 cards), never narrower than 240px on small viewports.
+       Longhand + min-width (not flex:0 0 max(...)) so nothing here risks
+       being an invalid shorthand value that gets silently dropped. */
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: calc((100% - 48px) / 4);
+    min-width: 240px;
     scroll-snap-align: start;
     box-sizing: border-box;
     background: var(--lg-bg);
@@ -319,24 +326,38 @@
     cursor: default;
 }
 
-/* make the CTA cell take the available width so the button can be wide */
+/* make the CTA cell take the available width so the button can be wide.
+   min-width: 0 is required — flex items default to a min-content floor
+   (their own text width), so a "flex: 1" cell can still refuse to shrink
+   and overflow into the wishlist heart regardless of container width. */
 .section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card .footer__wrapper .footer__button--add-to-cart {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* wishlist heart must never shrink/get squeezed by the CTA cell above */
+.section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card .footer__wrapper .footer__button--wishlist-toggle {
+    flex: 0 0 auto;
 }
 
 /* red CTA — wide, low-height rectangle (override the block's text button) */
 .section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card .footer__wrapper .footer__button--add-to-cart button,
 .section.lg-oled-picks .product-recommendations-wrapper .dropin-content-grid__content .dropin-product-item-card .footer__wrapper .footer__button--add-to-cart a {
     display: block;
+    box-sizing: border-box;
     width: 100%;
-    padding: 6px 16px;
+    min-width: 0;
+    padding: 10px 20px;
     background: var(--lg-red);
     border: none;
     border-radius: 6px;
     color: #fff;
     font-weight: 600;
-    line-height: 1.2;
+    font-size: 15px;
+    line-height: 1.3;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: center;
 }
 

@@ -772,7 +772,7 @@ body:has(.section.lg-oled-plp) {
 .section.lg-oled-editorial p {
   max-width: 1100px;
   color: var(--lg-ink);
-  font-size: 1.05rem;
+  font-size: 1.40rem;
   line-height: 1.65;
   letter-spacing: 0;
 }

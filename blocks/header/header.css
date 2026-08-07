@@ -172,6 +172,7 @@ header nav .nav-brand a {
   font: var(--type-headline-1-font);
   letter-spacing: var(--type-headline-1-letter-spacing);
   font-weight: bold;
+  cursor: pointer;
 }
 
 li.nav-drop img {

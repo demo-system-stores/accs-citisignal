@@ -210,11 +210,21 @@
 /* ==========================================================================
    LG PDP — promotions banner (.lg-pdp-promo)
    ========================================================================== */
+
+/* section heading ("Discover our latest promotions") is authored as an h3,
+   not the h2 the shared styles.css PDP heading rule targets */
+.section.lg-pdp-promo .default-content-wrapper h3 {
+  font: 700 clamp(1.75rem, 3vw, 2.5rem) / 1.15 var(--type-base-font-family);
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-medium);
+  padding: 0;
+}
+
 .section.lg-pdp-promo .columns > div {
   flex-direction: column;
-  gap: 32px;
+  gap: var(--spacing-medium);
   margin: 0;
-  padding: 32px;
+  padding: var(--spacing-medium);
   background: var(--lg-bg);
   color: var(--lg-ink);
   border-radius: 16px;
@@ -224,41 +234,75 @@
   .section.lg-pdp-promo .columns > div {
     flex-direction: row;
     align-items: center;
-    padding: 48px;
+    justify-content: space-between;
+    padding: var(--spacing-big);
+    gap: var(--spacing-big);
+  }
+
+  .section.lg-pdp-promo .columns > div > div:first-child {
+    flex: 1 1 55%;
+    order: unset;
+  }
+
+  .section.lg-pdp-promo .columns > div > div:last-child {
+    flex: 0 0 auto;
+    width: min(380px, 40%);
+    order: unset;
   }
 }
 
-.section.lg-pdp-promo .columns h3 {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+.section.lg-pdp-promo .columns h2 {
+  line-height: 1.25;
   font-weight: 700;
   color: var(--lg-black);
-  margin: 0 0 8px;
-}
-
-.section.lg-pdp-promo .columns p {
-  color: var(--lg-ink);
-  font-size: 16px;
-  margin: 2px 0;
+  margin: 0 0 4px;
   padding: 0;
 }
 
-.section.lg-pdp-promo .columns a.button,
-.section.lg-pdp-promo .columns a.button:any-link {
-  margin-top: 16px;
-  padding: 12px 32px;
+.section.lg-pdp-promo .columns h3 {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--lg-black);
+  margin: 0 0 var(--spacing-small);
+  padding: 0;
+}
+
+.section.lg-pdp-promo .columns p {
+  color: var(--lg-gray);
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+/* style the CTA link directly — decorateButtons() only adds .button when the
+   link is wrapped in <strong>/<em> in the doc, which this content doesn't do */
+.section.lg-pdp-promo .columns a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--spacing-small);
+  padding: 10px 28px;
   background: var(--lg-red);
   border: none;
   border-radius: 999px;
   color: #fff;
+  font-size: 14px;
+  text-decoration: none;
   text-transform: none;
   font-weight: 600;
 }
 
-.section.lg-pdp-promo .columns a.button:hover {
+.section.lg-pdp-promo .columns a:hover {
   background: var(--lg-red-dark);
 }
 
 .section.lg-pdp-promo .columns img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
   border-radius: 12px;
 }
 

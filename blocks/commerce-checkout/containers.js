@@ -356,7 +356,7 @@ export const renderPaymentMethods = async (container, creditCardFormRef) => rend
           },
         },
         [PaymentMethodCode.SMART_BUTTONS]: {
-          enabled: false,
+          enabled: true,
         },
         [PaymentMethodCode.APPLE_PAY]: {
           enabled: false,
