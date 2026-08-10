@@ -81,10 +81,27 @@ function formatNumericAttributeValue(value) {
   return new Intl.NumberFormat(document.documentElement.lang).format(Number(trimmed));
 }
 
+// LG PDP buy box (.lg-pdp-details only) — reads real catalog attributes
+// (energy_grade, member_price, installment_text, product_tag, size_options)
+// the same way the PLP card does. Only decorative/non-functional pieces
+// (star rating, "Share your thoughts", suggestion pills) are hardcoded,
+// since there's no real rating or content-recommendation data for them.
+function getAttr(product, name) {
+  return product?.attributes?.find((a) => a.name === name)?.value;
+}
+
+function formatMoney(value, currency) {
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: currency || 'USD',
+  }).format(value);
+}
+
 export default async function decorate(block) {
   const eventProduct = events.lastPayload('pdp/data') ?? null;
   // bug: the pdp sends an object with event data even if product is not found.
   const product = eventProduct?.sku ? eventProduct : null;
+  const isLgPdpDetails = block.closest('.section')?.classList.contains('lg-pdp-details');
 
   const labels = await fetchPlaceholders();
 
@@ -140,6 +157,197 @@ export default async function decorate(block) {
   const $attributes = fragment.querySelector('.product-details__attributes');
 
   block.replaceChildren(fragment);
+
+  if (isLgPdpDetails) {
+    // The short description and the full description render the same
+    // underlying copy for most products — showing both stacks duplicate
+    // text. Hide the short one and present the full description as
+    // "Key Features" (always visible). "More" instead reveals the Details
+    // attributes list ($attributes, normally way down at the end of the
+    // fixed template order) right here next to Key Features, above the
+    // quantity/Add to Cart configuration block.
+    $shortDescription.remove();
+
+    const featuresBlock = document.createElement('div');
+    featuresBlock.className = 'lg-pdp-features-block';
+
+    const featuresHeading = document.createElement('h3');
+    featuresHeading.className = 'lg-pdp-features-heading';
+    featuresHeading.textContent = 'Key Features';
+    featuresBlock.appendChild(featuresHeading);
+
+    // always visible
+    $description.classList.add('lg-pdp-features-body');
+    featuresBlock.appendChild($description);
+
+    const moreToggle = document.createElement('button');
+    moreToggle.type = 'button';
+    moreToggle.className = 'lg-pdp-features-toggle';
+    moreToggle.textContent = 'More ⌄';
+    featuresBlock.appendChild(moreToggle);
+
+    // Details list — hidden until "More" is clicked
+    $attributes.classList.add('lg-pdp-details-list');
+    featuresBlock.appendChild($attributes);
+
+    moreToggle.addEventListener('click', () => {
+      const expanded = $attributes.classList.toggle('lg-pdp-details-list--expanded');
+      moreToggle.textContent = expanded ? 'Less ⌃' : 'More ⌄';
+    });
+
+    const $configuration = block.querySelector('.product-details__configuration');
+    $configuration.before(featuresBlock);
+  }
+
+  // `data.attributes` here comes from a direct GraphQL fetch (below) — the
+  // 'pdp/data' event payload never carries attributes (confirmed live:
+  // price/name render fine off it, but energy_grade/product_tag always came
+  // back empty). Idempotent: clears any previously-inserted elements first,
+  // though with a one-shot fetch this only ever runs once in practice.
+  function renderLgPdpExtras(data) {
+    if (!isLgPdpDetails || !data?.sku) return;
+
+    block.closest('.section')
+      ?.querySelectorAll('.lg-pdp-badge, .lg-pdp-meta-row, .lg-pdp-sizes, .lg-pdp-suggestions, .lg-pdp-sticky-bar')
+      .forEach((el) => el.remove());
+
+    const productLink = getProductLink(data.urlKey, data.sku);
+    // this event payload uses `prices` (plural), and `final.amount` is a
+    // plain number with `currency` as a sibling field — confirmed via a
+    // live dump of events.lastPayload('pdp/data'); a different, flatter
+    // shape than the PLP dropin's `price.final.amount.{value,currency}`.
+    const currency = data.prices?.final?.currency;
+    const finalValue = data.prices?.final?.amount;
+    const energyGrade = getAttr(data, 'energy_grade');
+    const memberPrice = getAttr(data, 'member_price');
+    const installmentText = getAttr(data, 'installment_text');
+    const tag = getAttr(data, 'product_tag');
+    const sizeOptions = getAttr(data, 'size_options');
+
+    // -- badge, above the title --
+    if (tag) {
+      const badge = document.createElement('span');
+      badge.className = 'lg-pdp-badge';
+      badge.textContent = tag;
+      $header.before(badge);
+    }
+
+    // -- sku (already rendered inside $header by ProductHeader) + rating row --
+    const metaRow = document.createElement('div');
+    metaRow.className = 'lg-pdp-meta-row';
+    // no real rating/review data exists on this product — hardcoded
+    // placeholder like lg.com shows for unreviewed products
+    metaRow.innerHTML = `
+      <span class="lg-pdp-rating"><span class="lg-pdp-stars" aria-hidden="true">★★★★★</span> 0 Reviews</span>
+      <button type="button" class="lg-pdp-share-thoughts">Share your thoughts!</button>
+    `;
+    $header.after(metaRow);
+
+    // -- size chips (only if the catalog attribute exists; real configurable
+    // products get real swatches from ProductOptions instead) --
+    if (sizeOptions) {
+      const sizes = sizeOptions.split('/').map((s) => s.replace(/"/g, '').trim()).filter(Boolean);
+      if (sizes.length) {
+        const chipRow = document.createElement('div');
+        chipRow.className = 'lg-pdp-sizes';
+        sizes.forEach((size, i) => {
+          const chip = document.createElement('span');
+          chip.className = 'lg-pdp-size-chip';
+          if (i === 0) chip.classList.add('is-active');
+          chip.textContent = `${size}"`;
+          chipRow.appendChild(chip);
+        });
+        metaRow.after(chipRow);
+      }
+    }
+
+    // -- suggestion pills, after the Key Features toggle — generic/decorative,
+    // no real content-recommendation data to back these with.
+    // ($shortDescription was already removed above, so insert relative to
+    // the features toggle button instead — inserting "after" a detached
+    // node is a silent no-op, which is why these weren't appearing.) --
+    const suggestions = document.createElement('div');
+    suggestions.className = 'lg-pdp-suggestions';
+    ['Ask LG anything', 'Why choose this product?', 'Buying tips', 'Best for me'].forEach((text, i) => {
+      const pill = document.createElement('span');
+      pill.className = 'lg-pdp-suggestion-pill';
+      if (i === 0) pill.classList.add('lg-pdp-suggestion-pill--accent');
+      pill.textContent = text;
+      suggestions.appendChild(pill);
+    });
+    const featuresBlock = block.querySelector('.lg-pdp-features-block');
+    if (featuresBlock) featuresBlock.appendChild(suggestions);
+    else $description.after(suggestions);
+
+    // -- sticky summary bar: title, energy grade + info sheet, price,
+    // member price, Buy Now — mirrors the main buy box, real data throughout.
+    // Outer bar spans the full viewport width (background only); inner wraps
+    // the actual row and is centered/width-capped like the rest of the page. --
+    const stickyBar = document.createElement('div');
+    stickyBar.className = 'lg-pdp-sticky-bar';
+    const stickyInner = document.createElement('div');
+    stickyInner.className = 'lg-pdp-sticky-bar-inner';
+    stickyBar.appendChild(stickyInner);
+
+    const stickyTitle = document.createElement('div');
+    stickyTitle.className = 'lg-pdp-sticky-title';
+    stickyTitle.textContent = data.name;
+    stickyInner.appendChild(stickyTitle);
+
+    if (energyGrade) {
+      const energyRow = document.createElement('a');
+      energyRow.className = 'lg-pdp-sticky-energy';
+      energyRow.href = productLink;
+      energyRow.innerHTML = `<span class="lg-pdp-energy lg-pdp-energy--${energyGrade.toLowerCase()}">${energyGrade}</span> Product Information Sheet`;
+      stickyInner.appendChild(energyRow);
+    }
+
+    if (finalValue != null) {
+      const priceBlock = document.createElement('div');
+      priceBlock.className = 'lg-pdp-sticky-price-block';
+      priceBlock.innerHTML = `
+        <span class="lg-pdp-sticky-price">${formatMoney(finalValue, currency)}</span>
+        ${memberPrice ? `<span class="lg-pdp-sticky-member-price">Members Only ${formatMoney(parseFloat(memberPrice), currency)}</span>` : ''}
+      `;
+      stickyInner.appendChild(priceBlock);
+    }
+
+    const stickyBuyNow = document.createElement('div');
+    stickyBuyNow.className = 'lg-pdp-sticky-buy-now';
+    UI.render(Button, {
+      children: 'Buy Now',
+      onClick: () => $addToCart.querySelector('button')?.click(),
+      variant: 'primary',
+    })(stickyBuyNow);
+    stickyInner.appendChild(stickyBuyNow);
+
+    if (installmentText) {
+      const installment = document.createElement('div');
+      installment.className = 'lg-pdp-sticky-installment';
+      installment.innerHTML = `${installmentText} <strong>PayPal</strong>`;
+      stickyInner.appendChild(installment);
+    }
+
+    block.closest('.section')?.prepend(stickyBar);
+  }
+
+  if (isLgPdpDetails && product) {
+    // fetch attributes directly — the 'pdp/data' event never includes them
+    pdpApi.fetchGraphQl(`
+      query GET_PRODUCT_ATTRIBUTES($skus: [String!]) {
+        products(skus: $skus) {
+          sku
+          attributes { name label value roles }
+        }
+      }
+    `, { method: 'GET', variables: { skus: [product.sku] } })
+      .then(({ data }) => data?.products?.[0]?.attributes || [])
+      .catch((e) => {
+        console.error('Error fetching attributes for lg-pdp-details', e);
+        return [];
+      })
+      .then((attributes) => renderLgPdpExtras({ ...product, attributes }));
+  }
 
   const gallerySlots = {
     CarouselThumbnail: (ctx) => {
