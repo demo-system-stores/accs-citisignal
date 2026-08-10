@@ -660,7 +660,9 @@
 .section.lg-pdp-details .lg-pdp-sticky-bar {
     position: sticky;
     top: var(--nav-height, 0px);
-    z-index: 5;
+    /* below header.css's .nav-wrapper (z-index: 3) so the header's own
+       dropdowns/mega-menu always render above this, not behind it */
+    z-index: 1;
     margin-bottom: var(--spacing-medium);
 }
 
