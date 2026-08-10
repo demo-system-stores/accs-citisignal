@@ -9,6 +9,7 @@
 
 .accordion details p {
     margin: 1em;
+    margin-top: 0;
 }
 
 .accordion details summary {
