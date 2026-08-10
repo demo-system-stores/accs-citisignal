@@ -281,6 +281,7 @@ header nav .nav-sections ul>li:empty {
     visibility: visible;
     white-space: nowrap;
     height: 100%;
+    margin-left: 10px;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
@@ -294,8 +295,9 @@ header nav .nav-sections ul>li:empty {
   header nav .nav-sections .default-content-wrapper>ul>li,
   header nav .nav-sections .nav-drop {
     border-radius: 0;
-    padding: 10px var(--spacing-small);
+    padding: 10px var(--spacing-xsmall);
     font: var(--type-body-1-default-font);
+    font-size: 1.3rem;
     letter-spacing: var(--type-body-1-default-letter-spacing);
     color: var(--color-neutral-800);
   }
@@ -308,8 +310,9 @@ header nav .nav-sections ul>li:empty {
   header nav .nav-sections ul {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     height: 100%;
-    gap: 8px;
+    gap: 2px;
     margin: 0;
   }
 
