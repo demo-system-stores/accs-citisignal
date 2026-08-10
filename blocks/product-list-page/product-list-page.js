@@ -159,10 +159,18 @@ export default async function decorate(block) {
 
     const tag = getAttr(product, 'product_tag');
     if (tag) {
-      const badge = document.createElement('span');
-      badge.className = 'lg-oled-plp-badge';
-      badge.textContent = tag;
-      wrapper.appendChild(badge);
+      const badges = document.createElement('div');
+      badges.className = 'lg-oled-plp-badges';
+      (Array.isArray(tag) ? tag : String(tag).split(','))
+        .map((value) => value.trim())
+        .filter(Boolean)
+        .forEach((value) => {
+          const badge = document.createElement('span');
+          badge.className = 'lg-oled-plp-badge';
+          badge.textContent = value;
+          badges.appendChild(badge);
+        });
+      wrapper.appendChild(badges);
     }
 
     const title = document.createElement('a');

@@ -448,10 +448,16 @@
 }
 
 /* -- name block: tag, title, sku + rating, size chips -- */
+.section.lg-oled-plp .lg-oled-plp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    gap: var(--spacing-xsmall);
+    margin-bottom: var(--spacing-xsmall);
+}
+
 .section.lg-oled-plp .lg-oled-plp-badge {
     display: inline-block;
-    align-self: flex-start;
-    margin-bottom: var(--spacing-xsmall);
     padding: 3px 10px;
     border: 1px solid var(--lg-red);
     border-radius: 4px;
