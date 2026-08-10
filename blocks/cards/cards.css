@@ -1,5 +1,5 @@
 .cards-container .cards-wrapper {
-  margin-top: 0;
+  margin-top: 35px;
 }
 
 .cards > ul {
@@ -15,7 +15,7 @@
   border: none;
   background-color: var(--color-brand-1000);
   border-radius: 20px;
-  padding: 20px;
+  padding: 0;
   color: var(--background-color);
   font-size: 16px;
   font-weight: normal;
@@ -38,9 +38,10 @@
 
 .cards > ul > li img {
   width: auto;
-  height: 100px;
+  height: auto;
   aspect-ratio: initial;
   object-fit: cover;
+  border-radius: 20px 20px 0 0;
 }
 
 /* ==========================================================================

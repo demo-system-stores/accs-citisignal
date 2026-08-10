@@ -143,7 +143,7 @@
    ========================================================================== */
 .section.lg-search-bar {
   /* header is position:fixed, so clear its height (--nav-height) + a gap */
-  margin-block: calc(var(--nav-height) + var(--spacing-xxlarge)) var(--spacing-medium) !important;
+  margin-block: 6rem 2rem !important;
 }
 
 .section.lg-search-bar .search {

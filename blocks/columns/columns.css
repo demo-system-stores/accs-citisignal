@@ -5,7 +5,7 @@
   flex-direction: column;
   padding: 0;
   margin: 25px 0;
-  background-color: var(--main-color-accent);
+  background-color: var(--lg-black);
   color: var(--background-color);
   border-radius: 20px;
 }
@@ -66,9 +66,10 @@
 
 .columns-wrapper .columns a.button {
   color: var(--background-color);
-  background-color: var(--color-brand-1000);
+  background-color: var(--lg-red);
   border: none;
   text-transform: uppercase;
+  margin-top: 10px;
 }
 
 

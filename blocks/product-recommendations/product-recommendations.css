@@ -37,6 +37,7 @@
     flex-flow: column;
     margin: 0;
     padding: 0;
+    vertical-align: super;
 }
 
 .product-recommendations .product-grid .product-grid-item a span {
@@ -295,7 +296,7 @@
 .section.lg-oled-picks .lg-carousel-controls {
     position: absolute;
     top: 0;
-    right: 24px;
+    right: 9rem;
     display: flex;
     align-items: center;
     gap: 12px;
