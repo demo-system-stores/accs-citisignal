@@ -111,27 +111,158 @@
 }
 
 .product-details__gallery .pdp-carousel {
+  position: relative;
   max-height: 60vh;
   width: 100%;
+  /* min-width:0 is required: this is a flex child of .product-details__gallery
+     and its own content is a nowrap row of every slide (huge intrinsic width),
+     so the default min-width:auto would let it blow past the container instead
+     of clipping to it */
+  min-width: 0;
+  max-width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: var(--flex-carousel, column);
+  gap: var(--gap, var(--spacing-small));
 }
 
-.product-details__gallery .pdp-carousel__slides,
-.product-details__gallery .pdp-carousel__main,
+/* Main slide strip. The dropin drives this as a horizontally-scrolling flex
+   row: each slide is exactly the wrapper's width and it sets scrollLeft =
+   wrapperWidth * index to bring a slide into view (clicking a thumbnail or an
+   arrow calls the same index-based scroll). So the layout must be a clean
+   flex row of full-width slides with no gap, otherwise its offsetWidth math
+   desyncs (e.g. showing a different image than the selected thumbnail). */
+.product-details__gallery .pdp-carousel__wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  width: var(--total-width, 100%);
+  min-width: 0;
+  max-width: 100%;
+  height: var(--height, auto);
+  max-height: 60vh;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
 .product-details__gallery .pdp-carousel__slide {
   display: flex !important;
   justify-content: center !important;
   align-items: center;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 49vh;
+}
+
+/* arrow buttons — the dropin classes these differently per variant
+   (pdp-carousel__button, pdp-carousel__button--thumbnailsRow, etc.), so match
+   any of them */
+.product-details__gallery [class*='pdp-carousel__button'] {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: 50%;
+  background: var(--color-neutral-50, #fff);
+  color: var(--color-neutral-800);
+  cursor: pointer;
+}
+
+.product-details__gallery [class*='pdp-carousel__button']:disabled,
+.product-details__gallery .dropin-button--tertiary--disabled[class*='pdp-carousel__button'] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.product-details__gallery .pdp-carousel__button__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* prev/next arrows that overlay the main image (dots / arrows variants) —
+   anything that isn't the thumbnails-row/column layout */
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > [class*='pdp-carousel__button'] {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > .pdp-carousel__button--prev {
+  left: var(--spacing-xsmall);
+}
+
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > .pdp-carousel__button--next {
+  right: var(--spacing-xsmall);
+}
+
+/* thumbnails row/column: [prev][scrollable thumbnail strip][next] */
+.product-details__gallery [class*='pdp-carousel__controls__container--'] {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  margin-top: var(--spacing-xsmall);
   width: 100%;
   max-width: 100%;
   overflow: hidden;
 }
 
-.product-details__gallery .pdp-carousel > * {
+.product-details__gallery .pdp-carousel__controls__wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto hidden;
+  scrollbar-width: none;
+  width: 496px;
+}
+
+.product-details__gallery .pdp-carousel__controls__wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.product-details__gallery .pdp-carousel__controls {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: var(--spacing-xsmall);
+}
+
+.product-details__gallery .pdp-carousel__controls--thumbnailsColumn {
+  flex-direction: column;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__container {
+  position: relative;
+  flex: 0 0 auto;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail:checked + .pdp-carousel__thumbnail__span {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: -2px;
 }
 
 .product-details__description img,
@@ -142,14 +273,14 @@
   height: auto;
 }
 
-.product-details__gallery .pdp-carousel img {
+.product-details__gallery .pdp-carousel__slide img {
   margin-left: auto !important;
   margin-right: auto !important;
   display: block;
   object-fit: contain;
   object-position: center;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: 100%;
   max-height: 60vh;
 }
@@ -162,6 +293,14 @@
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__span img,
+.product-details__gallery .pdp-carousel__thumbnail__span picture {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
 }
 
 .product-details__gallery .pdp-carousel--thumbnailsRow {
