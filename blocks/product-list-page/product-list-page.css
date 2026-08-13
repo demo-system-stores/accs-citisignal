@@ -111,9 +111,6 @@
 
 /* Product image wrapper border and hover effects */
 .block.product-list-page .dropin-product-item-card__image {
-    border: 1px solid var(--color-neutral-300);
-    border-radius: var(--shape-border-radius-2);
-    padding: var(--spacing-xsmall);
     transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
@@ -147,3 +144,583 @@
         justify-content: flex-end;
     }
 }
+
+/* ==========================================================================
+   LG SEARCH — results (section class: .lg-search-results)
+   Beige page, single-column list of horizontal white cards, red CTAs — to
+   match lg.com/uk/search. Styling only.
+   ========================================================================== */
+
+/* result count line */
+.section.lg-search-results .block.product-list-page .search__result-info {
+    font-size: 15px;
+    color: var(--lg-ink);
+}
+
+.section.lg-search-results .block.product-list-page .search__result-info strong {
+    color: var(--lg-black);
+    font-weight: 700;
+}
+
+/* sort dropdown → bordered white LG pill */
+.section.lg-search-results .block.product-list-page .dropin-picker__select {
+    border: 1px solid var(--lg-line);
+    border-radius: 999px;
+    padding-block: 10px;
+    color: var(--lg-ink);
+    background: var(--lg-bg);
+}
+
+/* facet rail */
+.section.lg-search-results .block.product-list-page .search__facets {
+    border-right: none;
+}
+
+.section.lg-search-results .block.product-list-page .product-discovery-facet__header {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--lg-black);
+}
+
+.section.lg-search-results .block.product-list-page .product-discovery-facet {
+    border-bottom: 1px solid var(--lg-line-soft);
+    padding-block: var(--spacing-xsmall);
+}
+
+/* single-column list of results */
+.section.lg-search-results .block.product-list-page .product-discovery-product-list__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* horizontal white card: image left, details right */
+.section.lg-search-results .block.product-list-page .dropin-product-item-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 28px;
+    background: var(--lg-bg);
+    border-radius: 12px;
+    padding: 20px 28px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image-container,
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+    flex: 0 0 180px;
+    width: 180px;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+    border: none;
+    border-radius: 8px;
+    background: var(--lg-bg-alt);
+    padding: var(--spacing-xsmall);
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__content {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__title {
+    color: var(--lg-ink);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__title a {
+    color: inherit;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__sku {
+    color: var(--lg-gray);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__price,
+.section.lg-search-results .block.product-list-page .dropin-price--bold {
+    color: var(--lg-black);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.section.lg-search-results .block.product-list-page .dropin-product-item-card__action {
+    margin-top: 10px;
+}
+
+/* CTAs → LG red primary, black-outline secondary */
+.section.lg-search-results .block.product-list-page a.button.primary,
+.section.lg-search-results .block.product-list-page button.button.primary,
+.section.lg-search-results .block.product-list-page .dropin-button--primary {
+    background: var(--lg-red);
+    border-color: var(--lg-red);
+    color: #fff;
+    border-radius: 999px;
+}
+
+.section.lg-search-results .block.product-list-page a.button.primary:hover,
+.section.lg-search-results .block.product-list-page button.button.primary:hover,
+.section.lg-search-results .block.product-list-page .dropin-button--primary:hover {
+    background: var(--lg-red-dark);
+    border-color: var(--lg-red-dark);
+}
+
+.section.lg-search-results .block.product-list-page a.button.secondary,
+.section.lg-search-results .block.product-list-page button.button.secondary {
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+    border-radius: 999px;
+}
+
+/* pagination: active page red */
+.section.lg-search-results .block.product-list-page .dropin-pagination_list-item--active {
+    color: var(--lg-red);
+    border-color: var(--lg-red);
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card {
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card__image-container,
+    .section.lg-search-results .block.product-list-page .dropin-product-item-card__image {
+        flex-basis: 120px;
+        width: 120px;
+    }
+}
+
+/* ==========================================================================
+   LG OLED — category product grid (section class: .lg-oled-plp)
+   Grid of vertical white cards on the beige page, red CTAs. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+/* section itself carries the beige explicitly, so the gaps between cards
+   (created via card margin, not grid gap) show beige instead of whatever
+   background the page happens to have if the body:has() rule doesn't match */
+.section.lg-oled-plp {
+    background: var(--lg-beige);
+}
+
+.section.lg-oled-plp .block.product-list-page .search__result-info {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--lg-black);
+}
+
+.section.lg-oled-plp .block.product-list-page .search__result-info strong {
+    color: var(--lg-black);
+    font-weight: 700;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-picker__select {
+    border: 1px solid var(--lg-line);
+    border-radius: 999px;
+    padding-block: 10px;
+    color: var(--lg-ink);
+    background: var(--lg-bg);
+}
+
+.section.lg-oled-plp .block.product-list-page .product-discovery-facet__header {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--lg-black);
+    margin-bottom: var(--spacing-xsmall);
+}
+
+.section.lg-oled-plp .block.product-list-page .product-discovery-facet {
+    border-bottom: 1px solid var(--lg-line-soft);
+    padding-block: var(--spacing-small);
+}
+
+/* grid: 2 → 3 columns
+   gap intentionally omitted — spacing comes from the card's own margin
+   below, since gap has no effect if cards aren't direct grid children */
+.section.lg-oled-plp .block.product-list-page .product-discovery-product-list__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 900px) {
+    .section.lg-oled-plp .block.product-list-page .product-discovery-product-list__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* vertical white card
+   margin (not just the grid's gap) creates the spacing: the dropin may wrap
+   cards in an intermediate list node rather than making them direct children
+   of .product-discovery-product-list__grid, in which case grid `gap` has
+   nothing to apply between and produces no visible space at all. */
+.section.lg-oled-plp .block.product-list-page .dropin-product-item-card {
+    display: flex;
+    flex-direction: column;
+    /* grid items get an implicit min-width:auto (content min-content) floor,
+       same footgun as flex items — without this the card refuses to shrink
+       to its grid column width and overflows into the next column */
+    min-width: 0;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 12px;
+    background: var(--lg-bg);
+    border-radius: 16px;
+    padding: var(--spacing-medium);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+    text-align: left;
+    overflow: hidden;
+}
+
+/* Real card content comes from 4 dropin slots (ProductName, ProductImage,
+   ProductPrice, ProductActions), but the card only has TWO real direct
+   flex children: .dropin-product-item-card__image-container and
+   .dropin-product-item-card__content — the latter bundles name+price+actions
+   together as ITS OWN children, one level deeper than the card. `order` only
+   affects direct flex children, so setting it on the nested lg-oled-plp-*
+   classes did nothing (confirmed via live DOM inspection — visual order was
+   still image-container-first regardless). Fix: dissolve .content's own box
+   with display:contents so its children become real siblings of
+   image-container, then order works across all four at the card level. */
+.section.lg-oled-plp .dropin-product-item-card__content {
+    display: contents;
+}
+
+.section.lg-oled-plp .dropin-product-item-card__image-container {
+    order: 2;
+}
+
+/* these __title/__price/__action wrappers (the dropin's own per-slot
+   containers, confirmed via live inspection) are the real flex items now
+   that .content is display:contents — order goes here, not on the nested
+   lg-oled-plp-* classes I originally (incorrectly) targeted */
+.section.lg-oled-plp .dropin-product-item-card__title {
+    order: 1;
+}
+
+.section.lg-oled-plp .dropin-product-item-card__price {
+    order: 3;
+}
+
+.section.lg-oled-plp .dropin-product-item-card__action {
+    order: 4;
+    /* grid stretch already makes every card in a row the same height; price
+       content (energy row / price / member price / installment) varies a
+       lot in how many lines it takes, so pin actions to the bottom instead
+       of letting it float wherever that content happens to end — otherwise
+       Learn More/Buy Now/Compare stagger between cards in the same row */
+    margin-top: auto;
+}
+
+.section.lg-oled-plp .lg-oled-plp-name {
+    order: 1;
+}
+
+.section.lg-oled-plp .lg-oled-plp-image-link {
+    display: block;
+    border-radius: 8px;
+    padding: var(--spacing-small);
+    margin-bottom: var(--spacing-medium);
+}
+
+/* TV product photos are wide (~16:9), not square — the shared
+   .block.product-list-page rule forces aspect-ratio:1, which letterboxes
+   them with a lot of empty gray padding top/bottom. Override to match the
+   actual photo shape and fill the wrapper more tightly. */
+.section.lg-oled-plp .lg-oled-plp-image-link picture,
+.section.lg-oled-plp .lg-oled-plp-image-link img {
+    aspect-ratio: 16 / 10;
+}
+
+.section.lg-oled-plp .lg-oled-plp-image-link img {
+    width: 100%;
+}
+
+.section.lg-oled-plp .lg-oled-plp-price-block {
+    order: 3;
+}
+
+.section.lg-oled-plp .lg-oled-plp-actions {
+    order: 4;
+}
+
+/* -- name block: tag, title, sku + rating, size chips --
+   Cards vary in whether they have a tag, how many size options they list,
+   and how long the title is. The JS always renders the badges/sizes rows
+   (even empty) so the min-heights below can reserve identical space for
+   them on every card, keeping the image (and everything under it) aligned
+   across a grid row regardless of which optional content is present. */
+.section.lg-oled-plp .lg-oled-plp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    align-content: flex-start;
+    gap: var(--spacing-xsmall);
+    min-height: 20px;
+    margin-bottom: var(--spacing-xsmall);
+}
+
+.section.lg-oled-plp .lg-oled-plp-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid var(--lg-red);
+    border-radius: 4px;
+    color: var(--lg-red);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.section.lg-oled-plp .lg-oled-plp-title {
+    display: block;
+    color: var(--lg-black);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+    min-height: 4.05em;
+    margin-bottom: var(--spacing-xsmall);
+}
+
+.section.lg-oled-plp .lg-oled-plp-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xsmall);
+    margin-bottom: var(--spacing-small);
+    color: var(--lg-gray);
+    font-size: 13px;
+}
+
+.section.lg-oled-plp .lg-oled-plp-stars {
+    color: var(--lg-black);
+    letter-spacing: 1px;
+}
+
+.section.lg-oled-plp .lg-oled-plp-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: var(--spacing-xsmall);
+    /* reserves space for 2 rows of chips (the largest case, e.g. 5 sizes)
+       so a card with 0, 1 or 2 rows of chips still ends at the same height */
+    min-height: 62px;
+    margin-bottom: var(--spacing-small);
+}
+
+.section.lg-oled-plp .lg-oled-plp-size-chip {
+    padding: 6px 12px;
+    border: 1px solid var(--lg-line);
+    border-radius: 6px;
+    color: var(--lg-gray);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.section.lg-oled-plp .lg-oled-plp-size-chip.is-active {
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+}
+
+/* -- price block: energy grade + info sheet, price, member price, financing -- */
+.section.lg-oled-plp .lg-oled-plp-energy-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xsmall);
+    margin-bottom: var(--spacing-small);
+}
+
+.section.lg-oled-plp .lg-oled-plp-energy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 24px;
+    padding: 0 8px 0 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+}
+
+.section.lg-oled-plp .lg-oled-plp-energy--a { background: #1d8a3c; }
+.section.lg-oled-plp .lg-oled-plp-energy--b { background: #4caf3c; }
+.section.lg-oled-plp .lg-oled-plp-energy--c { background: #8bc34a; }
+.section.lg-oled-plp .lg-oled-plp-energy--d { background: #ffc107; }
+.section.lg-oled-plp .lg-oled-plp-energy--e { background: #ff9800; }
+.section.lg-oled-plp .lg-oled-plp-energy--f { background: #ff5722; }
+.section.lg-oled-plp .lg-oled-plp-energy--g { background: #e53935; }
+
+.section.lg-oled-plp .lg-oled-plp-info-sheet {
+    color: var(--lg-gray);
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.section.lg-oled-plp .lg-oled-plp-price,
+.section.lg-oled-plp .dropin-price--bold {
+    color: var(--lg-black);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.section.lg-oled-plp .lg-oled-plp-member-price {
+    color: var(--lg-ink);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.section.lg-oled-plp .lg-oled-plp-installment {
+    color: var(--lg-gray);
+    font-size: 13px;
+    margin-bottom: var(--spacing-medium);
+}
+
+.section.lg-oled-plp .lg-oled-plp-installment strong {
+    color: var(--lg-black);
+}
+
+/* -- actions: learn more + buy now, compare -- */
+.section.lg-oled-plp .lg-oled-plp-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-small);
+}
+
+.section.lg-oled-plp .lg-oled-plp-learn-more {
+    color: var(--lg-black);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.section.lg-oled-plp .lg-oled-plp-buy-now {
+    flex: 1;
+    min-width: 0;
+}
+
+.section.lg-oled-plp .lg-oled-plp-buy-now button,
+.section.lg-oled-plp .lg-oled-plp-buy-now a {
+    width: 100%;
+}
+
+.section.lg-oled-plp .lg-oled-plp-compare {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: var(--spacing-small);
+    color: var(--lg-gray);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.primary,
+.section.lg-oled-plp .block.product-list-page button.button.primary,
+.section.lg-oled-plp .block.product-list-page .dropin-button--primary {
+    background: var(--lg-red);
+    border-color: var(--lg-red);
+    color: #fff;
+    border-radius: 999px;
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.primary:hover,
+.section.lg-oled-plp .block.product-list-page button.button.primary:hover,
+.section.lg-oled-plp .block.product-list-page .dropin-button--primary:hover {
+    background: var(--lg-red-dark);
+    border-color: var(--lg-red-dark);
+}
+
+.section.lg-oled-plp .block.product-list-page a.button.secondary,
+.section.lg-oled-plp .block.product-list-page button.button.secondary {
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+    border-radius: 999px;
+}
+
+.section.lg-oled-plp .block.product-list-page .dropin-pagination_list-item--active {
+    color: var(--lg-red);
+    border-color: var(--lg-red);
+    font-weight: 700;
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ==========================================================================
+   LG — "Sort by" dropdown (search + OLED pages)
+   Un-float the label and place it to the LEFT of a bordered value box with a
+   chevron on the right, matching lg.com. Higher specificity (includes
+   .search__product-sort) so it wins over the section rules above. Styling only.
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-field,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-field,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+/* label → static, to the left, gray (both the field label and the floating one) */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-field__label,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker > label,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-field__label,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker > label {
+    position: static;
+    inset: auto;
+    transform: none;
+    order: -1;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--lg-gray);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* the value box */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__select,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__select {
+    appearance: none;
+    min-width: 190px;
+    padding: 12px 44px 12px 16px;
+    border: 1px solid var(--lg-line);
+    border-radius: 8px;
+    background: var(--lg-bg);
+    color: var(--lg-ink);
+    font-size: 15px;
+}
+
+/* chevron inside the box, on the right */
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__chevron,
+.section.lg-search-results .block.product-list-page .search__product-sort .dropin-picker__chevronDown,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__chevron,
+.section.lg-oled-plp .block.product-list-page .search__product-sort .dropin-picker__chevronDown {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+/* stylelint-enable no-descending-specificity */

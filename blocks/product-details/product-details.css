@@ -111,27 +111,158 @@
 }
 
 .product-details__gallery .pdp-carousel {
+  position: relative;
   max-height: 60vh;
   width: 100%;
+  /* min-width:0 is required: this is a flex child of .product-details__gallery
+     and its own content is a nowrap row of every slide (huge intrinsic width),
+     so the default min-width:auto would let it blow past the container instead
+     of clipping to it */
+  min-width: 0;
+  max-width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: var(--flex-carousel, column);
+  gap: var(--gap, var(--spacing-small));
 }
 
-.product-details__gallery .pdp-carousel__slides,
-.product-details__gallery .pdp-carousel__main,
+/* Main slide strip. The dropin drives this as a horizontally-scrolling flex
+   row: each slide is exactly the wrapper's width and it sets scrollLeft =
+   wrapperWidth * index to bring a slide into view (clicking a thumbnail or an
+   arrow calls the same index-based scroll). So the layout must be a clean
+   flex row of full-width slides with no gap, otherwise its offsetWidth math
+   desyncs (e.g. showing a different image than the selected thumbnail). */
+.product-details__gallery .pdp-carousel__wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  width: var(--total-width, 100%);
+  min-width: 0;
+  max-width: 100%;
+  height: var(--height, auto);
+  max-height: 60vh;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
 .product-details__gallery .pdp-carousel__slide {
   display: flex !important;
   justify-content: center !important;
   align-items: center;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 49vh;
+}
+
+/* arrow buttons — the dropin classes these differently per variant
+   (pdp-carousel__button, pdp-carousel__button--thumbnailsRow, etc.), so match
+   any of them */
+.product-details__gallery [class*='pdp-carousel__button'] {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: 50%;
+  background: var(--color-neutral-50, #fff);
+  color: var(--color-neutral-800);
+  cursor: pointer;
+}
+
+.product-details__gallery [class*='pdp-carousel__button']:disabled,
+.product-details__gallery .dropin-button--tertiary--disabled[class*='pdp-carousel__button'] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.product-details__gallery .pdp-carousel__button__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* prev/next arrows that overlay the main image (dots / arrows variants) —
+   anything that isn't the thumbnails-row/column layout */
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > [class*='pdp-carousel__button'] {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > .pdp-carousel__button--prev {
+  left: var(--spacing-xsmall);
+}
+
+.product-details__gallery .pdp-carousel:not(.pdp-carousel--thumbnailsRow, .pdp-carousel--thumbnailsColumn) > .pdp-carousel__button--next {
+  right: var(--spacing-xsmall);
+}
+
+/* thumbnails row/column: [prev][scrollable thumbnail strip][next] */
+.product-details__gallery [class*='pdp-carousel__controls__container--'] {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  margin-top: var(--spacing-xsmall);
   width: 100%;
   max-width: 100%;
   overflow: hidden;
 }
 
-.product-details__gallery .pdp-carousel > * {
+.product-details__gallery .pdp-carousel__controls__wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto hidden;
+  scrollbar-width: none;
+  width: 496px;
+}
+
+.product-details__gallery .pdp-carousel__controls__wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.product-details__gallery .pdp-carousel__controls {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: var(--spacing-xsmall);
+}
+
+.product-details__gallery .pdp-carousel__controls--thumbnailsColumn {
+  flex-direction: column;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__container {
+  position: relative;
+  flex: 0 0 auto;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail:checked + .pdp-carousel__thumbnail__span {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: -2px;
 }
 
 .product-details__description img,
@@ -142,14 +273,14 @@
   height: auto;
 }
 
-.product-details__gallery .pdp-carousel img {
+.product-details__gallery .pdp-carousel__slide img {
   margin-left: auto !important;
   margin-right: auto !important;
   display: block;
   object-fit: contain;
   object-position: center;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: 100%;
   max-height: 60vh;
 }
@@ -162,6 +293,14 @@
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__span img,
+.product-details__gallery .pdp-carousel__thumbnail__span picture {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
 }
 
 .product-details__gallery .pdp-carousel--thumbnailsRow {
@@ -340,4 +479,432 @@
   .product-details__quantity {
     grid-column: 1 / span 2;
   }
+}
+
+/* ==========================================================================
+   LG PDP — buy box (.lg-pdp-details)
+   LG typography/colours on the storefront-pdp dropin. Styling only.
+   ========================================================================== */
+
+/* title + sku */
+.section.lg-pdp-details .pdp-header__title {
+  color: var(--lg-black);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.section.lg-pdp-details {
+  max-width: none !important;
+}
+
+.section.lg-pdp-details .pdp-header__sku {
+  color: var(--lg-gray);
+  font-size: 14px;
+}
+
+/* price — override the green default */
+.section.lg-pdp-details .product-details__price,
+.section.lg-pdp-details .pdp-price,
+.section.lg-pdp-details .pdp-price__amount {
+  color: var(--lg-black);
+  font-weight: 700;
+}
+
+/* key features */
+.section.lg-pdp-details .product-details__short-description,
+.section.lg-pdp-details .pdp-short-description {
+  color: var(--lg-ink);
+}
+
+/* size swatches → bordered LG boxes */
+.section.lg-pdp-details .pdp-swatches__field__label {
+  color: var(--lg-gray);
+  font-size: 13px;
+}
+
+.section.lg-pdp-details .pdp-swatches__options button,
+.section.lg-pdp-details .pdp-swatches__options [class*="pdp-swatch-"] {
+  min-width: 64px;
+  padding: 12px 18px;
+  border: 1px solid var(--lg-line);
+  border-radius: 8px;
+  background: var(--lg-bg);
+  color: var(--lg-black);
+  font-weight: 600;
+}
+
+.section.lg-pdp-details .pdp-swatches__options button[aria-checked="true"],
+.section.lg-pdp-details .pdp-swatches__options button[aria-selected="true"],
+.section.lg-pdp-details .pdp-swatches__options .pdp-swatch--selected {
+  border-color: var(--lg-black);
+  border-width: 2px;
+}
+
+/* CTAs → LG red */
+.section.lg-pdp-details button.dropin-button--primary,
+.section.lg-pdp-details a.button.primary,
+.section.lg-pdp-details button.button.primary {
+  background: var(--lg-red);
+  border-color: var(--lg-red);
+  color: #fff;
+  border-radius: 999px;
+}
+
+.section.lg-pdp-details button.dropin-button--primary:hover,
+.section.lg-pdp-details a.button.primary:hover,
+.section.lg-pdp-details button.button.primary:hover {
+  background: var(--lg-red-dark);
+  border-color: var(--lg-red-dark);
+}
+
+/* LG PDP — swap layout to info-left / gallery-right (matches lg.com).
+   Pin both to row 1 so the info column tops-align with the gallery (otherwise
+   grid auto-flow bumps the info column to row 2). */
+@media (min-width: 900px) {
+  .section.lg-pdp-details .product-details__right-column {
+    grid-row: 1;
+    grid-column: 1 / span 6;
+    margin-top: 0;
+  }
+
+  .section.lg-pdp-details .product-details__left-column {
+    grid-row: 1;
+    grid-column: 7 / span 6;
+    margin-top: 0;
+  }
+}
+
+/* white background (overrides the shared body:has(.lg-pdp-details) beige,
+   which is still correct for the promo/specs/awards/support sections below) */
+.section.lg-pdp-details {
+    background: var(--lg-bg);
+}
+
+/* the generic "editable field" border/padding/hover-outline (styles.css
+   top of file) is meant as an authoring affordance, not a visual design —
+   it boxes in the gallery image, price, etc. Remove it for the LG design. */
+.section.lg-pdp-details .product-details__gallery,
+.section.lg-pdp-details .product-details__header,
+.section.lg-pdp-details .product-details__price,
+.section.lg-pdp-details .product-details__short-description,
+.section.lg-pdp-details .product-details__options,
+.section.lg-pdp-details .product-details__quantity,
+.section.lg-pdp-details .product-details__buttons,
+.section.lg-pdp-details .product-details__description,
+.section.lg-pdp-details .product-details__attributes {
+    border: none;
+    padding: 0;
+}
+
+.section.lg-pdp-details .product-details__gallery:hover,
+.section.lg-pdp-details .product-details__header:hover,
+.section.lg-pdp-details .product-details__price:hover,
+.section.lg-pdp-details .product-details__options:hover,
+.section.lg-pdp-details .product-details__quantity:hover,
+.section.lg-pdp-details .product-details__buttons:hover,
+.section.lg-pdp-details .product-details__description:hover,
+.section.lg-pdp-details .product-details__attributes:hover,
+.section.lg-pdp-details .product-details__gallery:focus-within,
+.section.lg-pdp-details .product-details__header:focus-within,
+.section.lg-pdp-details .product-details__price:focus-within,
+.section.lg-pdp-details .product-details__options:focus-within,
+.section.lg-pdp-details .product-details__quantity:focus-within,
+.section.lg-pdp-details .product-details__buttons:focus-within,
+.section.lg-pdp-details .product-details__description:focus-within,
+.section.lg-pdp-details .product-details__attributes:focus-within {
+    box-shadow: none;
+}
+
+/* -- Key Features (real description content, deduped with short-description) -- */
+.section.lg-pdp-details .lg-pdp-features-heading {
+    margin: var(--spacing-medium) 0 var(--spacing-small);
+    color: var(--lg-black);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* always visible */
+.section.lg-pdp-details .lg-pdp-features-body {
+    color: var(--lg-ink);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.section.lg-pdp-details .lg-pdp-features-body ul {
+    margin: 0;
+    padding-left: 1.2em;
+}
+
+.section.lg-pdp-details .lg-pdp-features-toggle {
+    display: block;
+    margin-top: var(--spacing-small);
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--lg-black);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Details attributes list — hidden until "More" is clicked, moved up next
+   to Key Features instead of its original position at the very end of the
+   buy box (below Add to Cart) */
+.section.lg-pdp-details .lg-pdp-details-list {
+    display: none;
+    margin-top: var(--spacing-medium);
+}
+
+.section.lg-pdp-details .lg-pdp-details-list--expanded {
+    display: block;
+}
+
+/* borderless product image, sitting directly on the white section bg */
+.section.lg-pdp-details .product-details__gallery img,
+.section.lg-pdp-details .product-details__gallery picture {
+    border-radius: 0;
+}
+
+/* ==========================================================================
+   LG PDP — badge, rating row, size chips, suggestion pills, sticky bar
+   (.lg-pdp-details only). Real catalog attributes (energy_grade,
+   member_price, installment_text, product_tag, size_options) come from
+   product-details.js; only the star rating / share-thoughts / suggestion
+   pills are hardcoded, since there's no real data behind those. Styling +
+   light DOM insertion, gated on isLgPdpDetails so other PDP pages are
+   unaffected.
+   ========================================================================== */
+
+.section.lg-pdp-details .lg-pdp-badge {
+    display: inline-block;
+    margin-bottom: var(--spacing-xsmall);
+    padding: 3px 10px;
+    border: 1px solid var(--lg-red);
+    border-radius: 4px;
+    color: var(--lg-red);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.section.lg-pdp-details .lg-pdp-meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-small);
+    margin: var(--spacing-xsmall) 0 var(--spacing-small);
+}
+
+.section.lg-pdp-details .lg-pdp-rating {
+    color: var(--lg-gray);
+    font-size: 14px;
+}
+
+.section.lg-pdp-details .lg-pdp-stars {
+    color: var(--lg-black);
+    letter-spacing: 1px;
+}
+
+.section.lg-pdp-details .lg-pdp-share-thoughts {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    background: var(--lg-pill);
+    color: var(--lg-ink);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.section.lg-pdp-details .lg-pdp-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xsmall);
+    margin-bottom: var(--spacing-medium);
+}
+
+.section.lg-pdp-details .lg-pdp-size-chip {
+    padding: 8px 16px;
+    border: 1px solid var(--lg-line);
+    border-radius: 8px;
+    color: var(--lg-gray);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.section.lg-pdp-details .lg-pdp-size-chip.is-active {
+    border-width: 2px;
+    border-color: var(--lg-black);
+    color: var(--lg-black);
+}
+
+.section.lg-pdp-details .lg-pdp-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xsmall);
+    margin-top: var(--spacing-medium);
+}
+
+.section.lg-pdp-details .lg-pdp-suggestion-pill {
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--lg-pill);
+    color: var(--lg-ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.section.lg-pdp-details .lg-pdp-suggestion-pill--accent {
+    background: color-mix(in oklab, var(--lg-red) 12%, white);
+    color: var(--lg-red);
+}
+
+/* energy grade chip — shared color scale with the PLP card */
+.section.lg-pdp-details .lg-pdp-energy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 24px;
+    padding: 0 8px 0 6px;
+    margin-right: 4px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    clip-path: polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+}
+
+.section.lg-pdp-details .lg-pdp-energy--a { background: #1d8a3c; }
+.section.lg-pdp-details .lg-pdp-energy--b { background: #4caf3c; }
+.section.lg-pdp-details .lg-pdp-energy--c { background: #8bc34a; }
+.section.lg-pdp-details .lg-pdp-energy--d { background: #ffc107; }
+.section.lg-pdp-details .lg-pdp-energy--e { background: #ff9800; }
+.section.lg-pdp-details .lg-pdp-energy--f { background: #ff5722; }
+.section.lg-pdp-details .lg-pdp-energy--g { background: #e53935; }
+
+/* -- sticky summary bar -- */
+.section.lg-pdp-details {
+    position: relative;
+}
+
+/* position:sticky + width:100vw does not reliably span full width (browsers
+   compute the sticky box's own width against its flow container, not the
+   viewport, unlike position:absolute/fixed — confirmed live, the bar only
+   spanned roughly half the viewport). Fix: keep the sticky box itself at
+   normal width, and use an absolutely-positioned ::before purely as the
+   full-bleed background layer — the same 100vw + translateX(-50%) trick as
+   the OLED category divider, but on an absolute element instead of the
+   sticky one, which is the part that was actually broken. */
+.section.lg-pdp-details .lg-pdp-sticky-bar {
+    position: sticky;
+    top: var(--nav-height, 0px);
+    /* below header.css's .nav-wrapper (z-index: 3) so the header's own
+       dropdowns/mega-menu always render above this, not behind it */
+    z-index: 1;
+    margin-bottom: var(--spacing-medium);
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background: #f0ece4;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+    z-index: -1;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-bar-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--spacing-medium);
+    max-width: var(--lg-max);
+    margin-inline: auto;
+    padding: var(--spacing-small) 16px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+    .section.lg-pdp-details .lg-pdp-sticky-bar-inner {
+        padding-inline: 24px;
+    }
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--lg-black);
+    font-size: 16px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-energy {
+    display: none;
+    align-items: center;
+    flex: 0 0 auto;
+    color: var(--lg-gray);
+    font-size: 13px;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-price-block {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+    white-space: nowrap;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-price {
+    color: var(--lg-black);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-member-price {
+    color: var(--lg-gray);
+    font-size: 11px;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-installment {
+    display: none;
+    flex: 0 0 auto;
+    color: var(--lg-gray);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-installment strong {
+    color: var(--lg-black);
+}
+
+/* energy grade + installment reappear once there's room to keep everything
+   on one line without crowding the title/price/buy-now */
+@media (min-width: 1300px) {
+    .section.lg-pdp-details .lg-pdp-sticky-energy,
+    .section.lg-pdp-details .lg-pdp-sticky-installment {
+        display: flex;
+    }
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-buy-now button {
+    background: var(--lg-red);
+    border-color: var(--lg-red);
+    border-radius: 999px;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.section.lg-pdp-details .lg-pdp-sticky-buy-now button:hover {
+    background: var(--lg-red-dark);
+    border-color: var(--lg-red-dark);
 }

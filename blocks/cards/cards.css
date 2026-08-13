@@ -1,5 +1,5 @@
 .cards-container .cards-wrapper {
-  margin-top: 0;
+  margin-top: 35px;
 }
 
 .cards > ul {
@@ -15,7 +15,7 @@
   border: none;
   background-color: var(--color-brand-1000);
   border-radius: 20px;
-  padding: 20px;
+  padding: 0;
   color: var(--background-color);
   font-size: 16px;
   font-weight: normal;
@@ -38,7 +38,275 @@
 
 .cards > ul > li img {
   width: auto;
-  height: 100px;
+  height: auto;
   aspect-ratio: initial;
   object-fit: cover;
+  border-radius: 20px 20px 0 0;
 }
+
+/* ==========================================================================
+   LG OLED — category quick-filter tiles (section class: .lg-oled-categories)
+   Borderless line-icon tiles in one scrollable row, gray labels; only the
+   active tile gets a light rounded highlight. Styling only.
+   ========================================================================== */
+.section.lg-oled-categories {
+  position: relative;
+}
+
+/* full-bleed divider: the section is centered/max-width capped, so the border
+   spans the viewport via a 100vw pseudo-element instead of the section box */
+.section.lg-oled-categories::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  border-bottom: 1px solid var(--lg-line);
+}
+
+.section.lg-oled-categories .cards > ul {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 16px;
+}
+
+.section.lg-oled-categories .cards > ul::-webkit-scrollbar {
+  display: none;
+}
+
+/* each tile: no card box, no shadow, transparent */
+.section.lg-oled-categories .cards > ul > li {
+  flex: 0 0 auto;
+  width: 132px;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+  color: var(--lg-gray);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* icon area: transparent, small line-icon */
+.section.lg-oled-categories .cards .cards-card-image {
+  min-height: 0;
+  margin-bottom: 6px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.section.lg-oled-categories .cards > ul > li img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.section.lg-oled-categories .cards .cards-card-body {
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* hover + active highlight (active = the "OLED EVO" tile, 3rd in the list) */
+.section.lg-oled-categories .cards > ul > li:hover {
+  color: var(--lg-black);
+  background: rgb(0 0 0 / 4%);
+}
+
+.section.lg-oled-categories .cards > ul > li:nth-child(3) {
+  background: var(--lg-bg);
+  color: var(--lg-black);
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+/* ==========================================================================
+   LG PDP — award cards (.lg-pdp-awards)
+   ========================================================================== */
+
+/* stylelint-disable no-descending-specificity */
+.section.lg-pdp-awards .cards > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-awards .cards > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.section.lg-pdp-awards .cards > ul > li {
+  background: var(--lg-bg);
+  color: var(--lg-gray);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.section.lg-pdp-awards .cards .cards-card-image {
+  min-height: 0;
+  margin: 0 0 24px;
+  justify-content: flex-start;
+}
+
+.section.lg-pdp-awards .cards > ul > li img {
+  height: 120px;
+  width: auto;
+}
+
+.section.lg-pdp-awards .cards .cards-card-body {
+  margin: 0;
+}
+
+.section.lg-pdp-awards .cards .cards-card-body strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--lg-black);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* footnote (default content below the cards block) */
+.section.lg-pdp-awards .default-content-wrapper p {
+  color: var(--lg-gray);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   LG PDP — support cards (.lg-pdp-support)
+   "Get Support" is authored as a lone <p><a>, never wrapped in <strong>/<em>,
+   so decorateButtons() never adds .button/.button-wrapper — style the raw
+   heading/paragraph/link directly instead of relying on those classes.
+   ========================================================================== */
+.section.lg-pdp-support .default-content-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
+}
+
+.section.lg-pdp-support .default-content-wrapper h3 {
+  font: 700 clamp(1.75rem, 3vw, 2.5rem) / 1.15 var(--type-base-font-family);
+  color: var(--lg-black);
+  margin: 0;
+  padding: 0;
+}
+
+.section.lg-pdp-support .default-content-wrapper p {
+  margin: 0;
+}
+
+.section.lg-pdp-support .default-content-wrapper p a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lg-bg);
+  border: 1px solid var(--lg-line);
+  border-radius: 8px;
+  color: var(--lg-black);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 12px 28px;
+}
+
+.section.lg-pdp-support .default-content-wrapper p a:hover {
+  border-color: var(--lg-black);
+}
+
+.section.lg-pdp-support .cards > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .section.lg-pdp-support .cards > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .section.lg-pdp-support .cards > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.section.lg-pdp-support .cards > ul > li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--spacing-medium);
+  background: var(--lg-bg);
+  color: var(--lg-gray);
+  border-radius: 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* icon sits top-right, inline with the title */
+.section.lg-pdp-support .cards .cards-card-image {
+  position: absolute;
+  top: var(--spacing-medium);
+  right: var(--spacing-medium);
+  min-height: 0;
+  margin: 0;
+}
+
+.section.lg-pdp-support .cards > ul > li img {
+  height: 32px;
+  width: auto;
+}
+
+.section.lg-pdp-support .cards .cards-card-body {
+  margin: 0;
+  padding-right: 48px;
+}
+
+.section.lg-pdp-support .cards .cards-card-body p {
+  margin: 0;
+}
+
+.section.lg-pdp-support .cards .cards-card-body strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--lg-black);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* circular arrow, directly under the description (in-flow, not pinned to the card bottom) */
+.section.lg-pdp-support .cards > ul > li::after {
+  content: "→";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-top: var(--spacing-medium);
+  border: 1px solid var(--lg-line);
+  border-radius: 50%;
+  color: var(--lg-black);
+  font-size: 18px;
+}
+
+/* stylelint-enable no-descending-specificity */

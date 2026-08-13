@@ -212,6 +212,10 @@
     color: var(--color-neutral-800);
     margin: 0 0 var(--spacing-medium) 0;
 }
+body > main > div > div > div > div.checkout__wrapper > div.checkout__content > div.checkout__main > div.checkout__shipping-form.checkout__block.dropin-design > div > div {
+    padding: 30px;
+    border-radius: 10px;
+}
 
 .checkout__shipping-form .dropin-header-container .dropin-divider,
 .checkout__billing-form .dropin-header-container .dropin-divider {
