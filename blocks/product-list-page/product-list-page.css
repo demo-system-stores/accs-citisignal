@@ -413,6 +413,12 @@
 
 .section.lg-oled-plp .dropin-product-item-card__action {
     order: 4;
+    /* grid stretch already makes every card in a row the same height; price
+       content (energy row / price / member price / installment) varies a
+       lot in how many lines it takes, so pin actions to the bottom instead
+       of letting it float wherever that content happens to end — otherwise
+       Learn More/Buy Now/Compare stagger between cards in the same row */
+    margin-top: auto;
 }
 
 .section.lg-oled-plp .lg-oled-plp-name {
@@ -447,12 +453,19 @@
     order: 4;
 }
 
-/* -- name block: tag, title, sku + rating, size chips -- */
+/* -- name block: tag, title, sku + rating, size chips --
+   Cards vary in whether they have a tag, how many size options they list,
+   and how long the title is. The JS always renders the badges/sizes rows
+   (even empty) so the min-heights below can reserve identical space for
+   them on every card, keeping the image (and everything under it) aligned
+   across a grid row regardless of which optional content is present. */
 .section.lg-oled-plp .lg-oled-plp-badges {
     display: flex;
     flex-wrap: wrap;
     align-self: flex-start;
+    align-content: flex-start;
     gap: var(--spacing-xsmall);
+    min-height: 20px;
     margin-bottom: var(--spacing-xsmall);
 }
 
@@ -464,6 +477,7 @@
     color: var(--lg-red);
     font-size: 12px;
     font-weight: 700;
+    line-height: 1;
 }
 
 .section.lg-oled-plp .lg-oled-plp-title {
@@ -473,6 +487,7 @@
     font-weight: 700;
     line-height: 1.35;
     text-decoration: none;
+    min-height: 4.05em;
     margin-bottom: var(--spacing-xsmall);
 }
 
@@ -494,7 +509,11 @@
 .section.lg-oled-plp .lg-oled-plp-sizes {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: var(--spacing-xsmall);
+    /* reserves space for 2 rows of chips (the largest case, e.g. 5 sizes)
+       so a card with 0, 1 or 2 rows of chips still ends at the same height */
+    min-height: 62px;
     margin-bottom: var(--spacing-small);
 }
 
@@ -505,6 +524,7 @@
     color: var(--lg-gray);
     font-size: 13px;
     font-weight: 600;
+    line-height: 1;
 }
 
 .section.lg-oled-plp .lg-oled-plp-size-chip.is-active {

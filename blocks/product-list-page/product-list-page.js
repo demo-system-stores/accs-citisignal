@@ -157,10 +157,13 @@ export default async function decorate(block) {
     const wrapper = document.createElement('div');
     wrapper.className = 'lg-oled-plp-name';
 
+    // Badges row is always rendered, even when there's no tag — CSS reserves
+    // a fixed height for it so cards without a tag don't shift their image
+    // (and everything below it) up relative to cards that have one.
+    const badges = document.createElement('div');
+    badges.className = 'lg-oled-plp-badges';
     const tag = getAttr(product, 'product_tag');
     if (tag) {
-      const badges = document.createElement('div');
-      badges.className = 'lg-oled-plp-badges';
       (Array.isArray(tag) ? tag : String(tag).split(','))
         .map((value) => value.trim())
         .filter(Boolean)
@@ -170,8 +173,8 @@ export default async function decorate(block) {
           badge.textContent = value;
           badges.appendChild(badge);
         });
-      wrapper.appendChild(badges);
     }
+    wrapper.appendChild(badges);
 
     const title = document.createElement('a');
     title.className = 'lg-oled-plp-title';
@@ -192,22 +195,24 @@ export default async function decorate(block) {
     metaRow.append(sku, rating);
     wrapper.appendChild(metaRow);
 
+    // Size-chip row is always rendered, even when there are no size options —
+    // CSS reserves a fixed two-row height for it so cards with 0, 1 or 2 rows
+    // of chips all still position their image (and everything below it) at
+    // the same vertical offset.
+    const chipRow = document.createElement('div');
+    chipRow.className = 'lg-oled-plp-sizes';
     const sizeOptions = getAttr(product, 'size_options');
     if (sizeOptions) {
       const sizes = sizeOptions.split('/').map((s) => s.replace(/"/g, '').trim()).filter(Boolean);
-      if (sizes.length) {
-        const chipRow = document.createElement('div');
-        chipRow.className = 'lg-oled-plp-sizes';
-        sizes.forEach((size, i) => {
-          const chip = document.createElement('span');
-          chip.className = 'lg-oled-plp-size-chip';
-          if (i === 0) chip.classList.add('is-active');
-          chip.textContent = `${size}"`;
-          chipRow.appendChild(chip);
-        });
-        wrapper.appendChild(chipRow);
-      }
+      sizes.forEach((size, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'lg-oled-plp-size-chip';
+        if (i === 0) chip.classList.add('is-active');
+        chip.textContent = `${size}"`;
+        chipRow.appendChild(chip);
+      });
     }
+    wrapper.appendChild(chipRow);
 
     ctx.replaceWith(wrapper);
   };
