@@ -21,6 +21,18 @@ import {
   IS_UE,
   IS_DA,
 } from './commerce.js';
+import {
+  runExperimentation,
+  showExperimentationRail,
+} from './experiment-loader.js';
+
+const experimentationConfig = {
+  prodHost: 'www.citisignal.com',
+  audiences: {
+    mobile: () => window.innerWidth < 600,
+    desktop: () => window.innerWidth >= 600,
+  },
+};
 
 /*
  * Trusted Types default policy.
@@ -201,6 +213,8 @@ async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
 
+  await runExperimentation(document, experimentationConfig);
+
   const main = doc.querySelector('main');
   if (main) {
     try {
@@ -246,6 +260,8 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  await showExperimentationRail(document, experimentationConfig);
 }
 
 /**
