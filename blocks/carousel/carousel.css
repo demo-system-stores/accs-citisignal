@@ -54,7 +54,7 @@
 }
 
 .carousel .carousel-slide .carousel-slide-image picture {
-  position: absolute;
+  position: relative;
   inset: 0;
 }
 
